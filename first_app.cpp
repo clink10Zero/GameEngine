@@ -13,6 +13,7 @@
 #include "components/graph.hpp"
 #include "components/RigidBody.hpp"
 #include "components/mesh.hpp"
+#include "components/aabb.hpp"
 
 #include "systems/graphSystem.hpp"
 #include "systems/physicsSystem.hpp"
@@ -25,8 +26,13 @@
 #include <stdexcept>
 #include <cassert>
 #include <chrono>
- 
+
+#include <iostream>
+
 Coordinator gCoordinator;
+
+std::shared_ptr<PhysiqueSystem> physicsSystem;
+
 namespace lve {
 
     struct GlobalUbo {
@@ -34,9 +40,9 @@ namespace lve {
         //glm::vec3 lightDirection = glm::normalize(glm::vec3{ 1.f, -3.f, -1.f });
         glm::vec4 ambientLightColor = { 1.f, 1.f, 1.f, 0.02f };
         glm::vec3 lightPosition{ -1.f };
-        alignas(16) glm::vec4 lightColor{1.f};
+        alignas(16) glm::vec4 lightColor{ 1.f };
     };
-     
+
     FirstApp::FirstApp() {
         globalPool = LveDescriptorPool::Builder(lveDevice)
             .setMaxSets(LveSwapChain::MAX_FRAMES_IN_FLIGHT)
@@ -67,7 +73,7 @@ namespace lve {
             .build();
 
         std::vector<VkDescriptorSet> globalDescriptorSets(LveSwapChain::MAX_FRAMES_IN_FLIGHT);
-        for (int i = 0; i < globalDescriptorSets.size(); i++){
+        for (int i = 0; i < globalDescriptorSets.size(); i++) {
             auto bufferInfo = uboBuffers[i]->descriptorInfo();
             LveDescriptorWriter(*globalSetLayout, *globalPool)
                 .writeBuffer(0, &bufferInfo)
@@ -77,16 +83,13 @@ namespace lve {
 
         SimpleRenderSystem simpleRenderSystem{ lveDevice,lveRenderer.getSwapChainRenderPass(),globalSetLayout->getDescriptorSetLayout() };
         LveCamera camera{};
-        //camera.setViewDirection(glm::vec3(0.f), glm::vec3(.5f, .0f, 1.f));
-        //camera.setViewTarget(glm::vec3(-1.f, -2.f, 2.f), glm::vec3(.0f, .0f, 2.5f));
-
 
         auto viewerObject = LveGameObject::createGameObject();
         viewerObject.transform.translation.z = -2.5f;
         KeyboardMovementController cameraController{};
 
         auto currentTime = std::chrono::high_resolution_clock::now();
-        
+
         while (!lveWindow.shouldClose()) {
             glfwPollEvents();
 
@@ -94,14 +97,14 @@ namespace lve {
             auto frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
             currentTime = newTime;
 
-            //frameTime = glm::min(frameTime, MAX_FRAME_TIME);
-
             cameraController.moveInPlanXZ(lveWindow.getGLFWwindow(), frameTime, viewerObject);
             camera.setViewYXZ(viewerObject.transform.translation, viewerObject.transform.rotation);
 
             float aspect = lveRenderer.getAspectRatio();
-            //camera.setOrthographicProjection(-aspect, aspect, -1, 1, -1, 1);
+
             camera.setPerspectiveProjection(glm::radians(50.f), aspect, .1f, 100.f);
+
+            physicsSystem->Update(frameTime);
 
             if (auto commandBuffer = lveRenderer.beginFrame()) {
                 int frameIndex = lveRenderer.getFrameIndex();
@@ -113,7 +116,6 @@ namespace lve {
                 uboBuffers[frameIndex]->flush();
 
                 lveRenderer.beginSwapChainRenderPass(commandBuffer);
-                //simpleRenderSystem.renderGameObjects(frameInfo, gameObjects);
                 simpleRenderSystem.renderScene(frameInfo, racine);
                 lveRenderer.endSwapChainRenderPass(commandBuffer);
                 lveRenderer.endFrame();
@@ -131,12 +133,14 @@ namespace lve {
         gCoordinator.RegisterComponent<RigidBody>();
         gCoordinator.RegisterComponent<Mesh>();
         gCoordinator.RegisterComponent<Graph>();
+        gCoordinator.RegisterComponent<AABB>();
 
-        auto physicsSystem = gCoordinator.RegisterSystem<PhysiqueSystem>();
+        physicsSystem = gCoordinator.RegisterSystem<PhysiqueSystem>();
         {
             Signature signature;
             signature.set(gCoordinator.GetComponentType<Transform>());
             signature.set(gCoordinator.GetComponentType<RigidBody>());
+            signature.set(gCoordinator.GetComponentType<AABB>());
             gCoordinator.SetSystemSignature<PhysiqueSystem>(signature);
         }
 
@@ -173,12 +177,36 @@ namespace lve {
 
         gCoordinator.AddComponent<Transform>(cube, t_cube);
 
+        RigidBody rb_cube{};
+
+        rb_cube.forceGravity = glm::vec3{ 0.f, 9.f, 0.f };
+
+        gCoordinator.AddComponent<RigidBody>(cube, rb_cube);
+
+        gCoordinator.AddComponent<AABB>(cube, AABB{});
+
         Graph g_cube{};
 
+        GameObject floor = gCoordinator.CreateGameObject();
+        gCoordinator.AddComponent<Mesh>(floor, (Mesh)LveModel::createModelFromFile(lveDevice, "models/colored_cube.obj"));
+
+        Transform t_floor{};
+        t_floor.translation = glm::vec3(0.f, 2.f, 0.f);
+        t_floor.rotation = glm::vec3(0.f, 0.f, 0.f);
+        t_floor.scale = glm::vec3(4.f, 0.5f, 4.f);
+
+        gCoordinator.AddComponent<Transform>(floor, t_floor);
+
+        gCoordinator.AddComponent<AABB>(floor, AABB{});
+
+        Graph g_floor{};
+
         g_racine.children.push_back(cube);
+        g_racine.children.push_back(floor);
         gCoordinator.AddComponent<Graph>(racine, g_racine);
         g_cube.parent = racine;
         gCoordinator.AddComponent<Graph>(cube, g_cube);
-
+        g_floor.parent = racine;
+        gCoordinator.AddComponent<Graph>(floor, g_floor);
     }
 }
