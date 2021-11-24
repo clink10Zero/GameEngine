@@ -66,10 +66,17 @@ class Coordinator
 			return mComponentManager->GetComponent<T>(go);
 		}
 
+
 		template<typename T>
 		ComponentType GetComponentType()
 		{
 			return mComponentManager->GetComponentType<T>();
+		}
+
+		template<typename T>
+		bool HaveComponent(GameObject go)
+		{
+			return mComponentManager->HaveComponent<T>(go);
 		}
 
 

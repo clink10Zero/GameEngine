@@ -50,6 +50,11 @@ class ComponentArray : public IComponentArray
 			return mComponentArray[mGameObjectToIndexMap[go]];
 		}
 
+		bool HaveData(GameObject go)
+		{
+			return mGameObjectToIndexMap.find(go) != mGameObjectToIndexMap.end();
+		}
+
 		void GameObjectDestroyed(GameObject go) override
 		{
 			if (mGameObjectToIndexMap.find(go) != mGameObjectToIndexMap.end())
