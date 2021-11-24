@@ -1,0 +1,5 @@
+# Visual Studio cache directory
+.vs/
+x64/Debug
+GameEngine.*
+

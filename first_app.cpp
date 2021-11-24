@@ -34,7 +34,7 @@ namespace lve {
         //glm::vec3 lightDirection = glm::normalize(glm::vec3{ 1.f, -3.f, -1.f });
         glm::vec4 ambientLightColor = { 1.f, 1.f, 1.f, 0.02f };
         glm::vec3 lightPosition{ -1.f };
-         alignas(16) glm::vec4 lightColor{1.f};
+        alignas(16) glm::vec4 lightColor{1.f};
     };
      
     FirstApp::FirstApp() {
@@ -167,7 +167,7 @@ namespace lve {
         gCoordinator.AddComponent<Mesh>(cube, (Mesh)LveModel::createModelFromFile(lveDevice, "models/colored_cube.obj"));
 
         Transform t_cube{};
-        t_cube.translation = glm::vec3(0.f, 0.f, 3.5f);
+        t_cube.translation = glm::vec3(0.f, 0.f, 0.f);
         t_cube.rotation = glm::vec3(0.f, 0.f, 0.f);
         t_cube.scale = glm::vec3(.5f, .5f, .5f);
 
