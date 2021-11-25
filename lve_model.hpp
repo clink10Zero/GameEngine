@@ -45,14 +45,14 @@ namespace lve {
 			void bind(VkCommandBuffer commandBuffer);
 			void draw(VkCommandBuffer commandBuffer);
 
-			glm::uvec3 getPostionVertex(int indice)
+			glm::vec3 getPostionVertex(int indice)
 			{
 				return vertices[indice].position;
 			}
 
 			int getVertexSize()
 			{
-				return vertices.size();
+				return static_cast<uint32_t>(vertices.size());
 			}
 
 		private:

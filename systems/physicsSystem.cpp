@@ -40,23 +40,24 @@ void PhysiqueSystem::TestCollision(float dt, GameObject go)
 	calculeAABB(go);
 	auto& aabb = gCoordinator.GetCompenent<AABB>(go);
 
-	glm::vec3 dimension = aabb.max - aabb.min;
 	bool move = true;
 	for (auto const& go2 : mGameObject)
 	{
-		calculeAABB(go2);
-		auto& aabb2 = gCoordinator.GetCompenent<AABB>(go2);
-
 		if (go2 != go)
 		{
-			if ((aabb2.min.x <= aabb.min.x + dimension.x)
-				|| (aabb2.min.x + dimension.x <= aabb.min.x)
-				|| (aabb2.min.y <= aabb.min.y + dimension.y)
-				|| (aabb2.min.y + dimension.y <= aabb.min.y)
-				|| (aabb2.min.z <= aabb.min.z + dimension.z)
-				|| (aabb2.min.z + dimension.z <= aabb.min.z)
-				)
-			{
+			calculeAABB(go2);
+			auto& aabb2 = gCoordinator.GetCompenent<AABB>(go2);
+
+			if((aabb.min.x<=aabb2.min.x && aabb.max.x>= aabb2.min.x ||
+				aabb.max.x>=aabb2.max.x && aabb.min.x<=aabb2.max.x ||
+				aabb.min.x>=aabb2.min.x && aabb.max.x <= aabb2.max.x) &&
+				(aabb.min.y<=aabb2.min.y && aabb.max.y>= aabb2.min.y ||
+				aabb.max.y>=aabb2.max.y && aabb.min.y<=aabb2.max.y ||
+				aabb.min.y>=aabb2.min.y && aabb.max.y <= aabb2.max.y) &&
+				(aabb.min.z<=aabb2.min.z && aabb.max.z>= aabb2.min.z ||
+				aabb.max.z>=aabb2.max.z && aabb.min.z<=aabb2.max.z ||
+				aabb.min.z>=aabb2.min.z && aabb.max.z <= aabb2.max.z )
+			){
 				std::cout << "passe : " << go << "\n";
 				move = false;
 			}
@@ -94,6 +95,6 @@ void PhysiqueSystem::calculeAABB(GameObject go)
 			min.z = tmp.z;
 	}
 
-	aabb.max = max;
-	aabb.min = min;
+	aabb.max = max * transform.scale + transform.translation;
+	aabb.min = min * transform.scale + transform.translation;
 }
