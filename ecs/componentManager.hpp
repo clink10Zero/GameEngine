@@ -50,9 +50,9 @@ class ComponentManager
 		}
 
 		template<typename T>
-		T& HaveComponent(GameObject go)
+		bool HaveComponent(GameObject go)
 		{
-			return GetComponentArray<T>()->GetData(go);
+			return GetComponentArray<T>()->HaveData(go);
 		}
 
 		void GameObjectDestroyed(GameObject go)

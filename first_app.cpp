@@ -139,8 +139,8 @@ namespace lve {
         {
             Signature signature;
             signature.set(gCoordinator.GetComponentType<Transform>());
-            signature.set(gCoordinator.GetComponentType<RigidBody>());
             signature.set(gCoordinator.GetComponentType<AABB>());
+            signature.set(gCoordinator.GetComponentType<Mesh>());
             gCoordinator.SetSystemSignature<PhysiqueSystem>(signature);
         }
 
