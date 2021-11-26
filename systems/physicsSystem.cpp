@@ -24,6 +24,7 @@ void PhysiqueSystem::Update(float dt)
 		TestCollision(dt, go);
 	}
 }
+
 void PhysiqueSystem::MakeMove(float dt, GameObject  go)
 {
 	if (gCoordinator.HaveComponent<RigidBody>(go))
@@ -32,36 +33,8 @@ void PhysiqueSystem::MakeMove(float dt, GameObject  go)
 		auto& transform = gCoordinator.GetCompenent<Transform>(go);
 
 
-	transform.translation += rb.velocity * dt;
-	rb.velocity += rb.forceGravity * dt;
-	
-}
-
-void PhysiqueSystem::TestCollision(float dt, GameObject go)
-{
-	calculeAABB(go);
-	auto& aabb = gCoordinator.GetCompenent<AABB>(go);
-
-	glm::vec3 dimension = aabb.max - aabb.min;
-	bool move = true;
-	for (auto const& go2 : mGameObject)
-	{
-		calculeAABB(go2);
-		auto& aabb2 = gCoordinator.GetCompenent<AABB>(go2);
-
-		if (go2 != go)
-		{
-			if ((aabb2.min.x >= aabb.min.x + dimension.x)
-				|| (aabb2.min.x + dimension.x >= aabb.min.x)
-				|| (aabb2.min.y >= aabb.min.y + dimension.y)
-				|| (aabb2.min.y + dimension.y >= aabb.min.y)
-				|| (aabb2.min.z >= aabb.min.z + dimension.z)
-				|| (aabb2.min.z + dimension.z >= aabb.min.z)
-				)
-			{
-				move = false;
-			}
-		}
+		transform.translation += rb.velocity * dt;
+		rb.velocity += rb.forceGravity * dt;
 	}
 }
 
