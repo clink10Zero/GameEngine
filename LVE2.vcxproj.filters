@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\ecs">
+      <UniqueIdentifier>{4caf9b0b-d60e-44ba-ad4c-8e1d3887c26e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\component">
+      <UniqueIdentifier>{ad222a95-48f3-4029-9e34-7f3e7b22e7bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\systems">
+      <UniqueIdentifier>{ec442782-e714-4d11-b736-5501bbb50fbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\systems">
+      <UniqueIdentifier>{0158b06d-e3c4-4807-99a2-f7147b5461cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="first_app.cpp">
@@ -55,13 +67,13 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="systems\graphSystem.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\systems</Filter>
     </ClCompile>
     <ClCompile Include="systems\physicsSystem.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\systems</Filter>
     </ClCompile>
     <ClCompile Include="systems\simple_render_system.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -107,47 +119,50 @@
     <ClInclude Include="lve_descriptors.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="ecs\componentArray.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="ecs\componentManager.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\componentArray.hpp">
+      <Filter>Fichiers d%27en-tête\ecs</Filter>
     </ClInclude>
     <ClInclude Include="ecs\coordinator.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\ecs</Filter>
     </ClInclude>
     <ClInclude Include="ecs\gameObjectManager.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\ecs</Filter>
     </ClInclude>
     <ClInclude Include="ecs\systemManager.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ecs\types.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\system.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\graphSystem.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\physicsSystem.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\ecs</Filter>
     </ClInclude>
     <ClInclude Include="components\graph.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\component</Filter>
     </ClInclude>
     <ClInclude Include="components\mesh.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\component</Filter>
     </ClInclude>
     <ClInclude Include="components\RigidBody.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\component</Filter>
     </ClInclude>
     <ClInclude Include="components\Transform.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\component</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\types.hpp">
+      <Filter>Fichiers d%27en-tête\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\graphSystem.hpp">
+      <Filter>Fichiers d%27en-tête\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\system.hpp">
+      <Filter>Fichiers d%27en-tête\systems</Filter>
     </ClInclude>
     <ClInclude Include="systems\simple_render_system.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\physicsSystem.hpp">
+      <Filter>Fichiers d%27en-tête\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="components\aabb.hpp">
+      <Filter>Fichiers d%27en-tête\component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

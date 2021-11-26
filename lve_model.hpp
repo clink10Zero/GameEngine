@@ -45,6 +45,7 @@ namespace lve {
 			void bind(VkCommandBuffer commandBuffer);
 			void draw(VkCommandBuffer commandBuffer);
 
+
 			glm::vec3 getPostionVertex(int indice)
 			{
 				return vertices[indice].position;
@@ -53,6 +54,7 @@ namespace lve {
 			int getVertexSize()
 			{
 				return static_cast<uint32_t>(vertices.size());
+
 			}
 
 		private:

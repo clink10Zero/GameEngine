@@ -66,6 +66,7 @@ class Coordinator
 			return mComponentManager->GetComponent<T>(go);
 		}
 
+
 		template<typename T>
 		ComponentType GetComponentType()
 		{
@@ -77,7 +78,6 @@ class Coordinator
 		{
 			return mComponentManager->HaveComponent<T>(go);
 		}
-
 		//system methods
 		template<typename T>
 		std::shared_ptr<T> RegisterSystem()
