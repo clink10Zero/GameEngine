@@ -26,7 +26,7 @@
 #include <stdexcept>
 #include <cassert>
 #include <chrono>
- 
+
 #include <iostream>
 
 Coordinator gCoordinator;
@@ -40,9 +40,9 @@ namespace lve {
         //glm::vec3 lightDirection = glm::normalize(glm::vec3{ 1.f, -3.f, -1.f });
         glm::vec4 ambientLightColor = { 1.f, 1.f, 1.f, 0.02f };
         glm::vec3 lightPosition{ -1.f };
-        alignas(16) glm::vec4 lightColor{1.f};
+        alignas(16) glm::vec4 lightColor{ 1.f };
     };
-     
+
     FirstApp::FirstApp() {
         globalPool = LveDescriptorPool::Builder(lveDevice)
             .setMaxSets(LveSwapChain::MAX_FRAMES_IN_FLIGHT)
@@ -73,7 +73,7 @@ namespace lve {
             .build();
 
         std::vector<VkDescriptorSet> globalDescriptorSets(LveSwapChain::MAX_FRAMES_IN_FLIGHT);
-        for (int i = 0; i < globalDescriptorSets.size(); i++){
+        for (int i = 0; i < globalDescriptorSets.size(); i++) {
             auto bufferInfo = uboBuffers[i]->descriptorInfo();
             LveDescriptorWriter(*globalSetLayout, *globalPool)
                 .writeBuffer(0, &bufferInfo)
@@ -89,7 +89,7 @@ namespace lve {
         KeyboardMovementController cameraController{};
 
         auto currentTime = std::chrono::high_resolution_clock::now();
-        
+
         while (!lveWindow.shouldClose()) {
             glfwPollEvents();
 
@@ -139,8 +139,9 @@ namespace lve {
         {
             Signature signature;
             signature.set(gCoordinator.GetComponentType<Transform>());
-            signature.set(gCoordinator.GetComponentType<RigidBody>());
             signature.set(gCoordinator.GetComponentType<AABB>());
+            signature.set(gCoordinator.GetComponentType<Mesh>());
+
             gCoordinator.SetSystemSignature<PhysiqueSystem>(signature);
         }
 

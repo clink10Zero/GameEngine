@@ -6,6 +6,9 @@
 #include "../components/mesh.hpp"
 #include "../components/aabb.hpp"
 
+#include <iostream>
+
+
 extern Coordinator gCoordinator;
 
 void PhysiqueSystem::Init()
@@ -15,15 +18,19 @@ void PhysiqueSystem::Init()
 
 void PhysiqueSystem::Update(float dt)
 {
+
 	for (auto const& go : mGameObject)
 	{
-		MakeMove(dt, go);
+		TestCollision(dt, go);
 	}
 }
 void PhysiqueSystem::MakeMove(float dt, GameObject  go)
-{	
-	auto& rb = gCoordinator.GetCompenent<RigidBody>(go);
-	auto& transform = gCoordinator.GetCompenent<Transform>(go);
+{
+	if (gCoordinator.HaveComponent<RigidBody>(go))
+	{
+		auto& rb = gCoordinator.GetCompenent<RigidBody>(go);
+		auto& transform = gCoordinator.GetCompenent<Transform>(go);
+
 
 	transform.translation += rb.velocity * dt;
 	rb.velocity += rb.forceGravity * dt;
@@ -56,16 +63,47 @@ void PhysiqueSystem::TestCollision(float dt, GameObject go)
 			}
 		}
 	}
+}
 
-	if (move)
+void PhysiqueSystem::TestCollision(float dt, GameObject go)
+{
+	calculeAABB(go);
+	auto& aabb = gCoordinator.GetCompenent<AABB>(go);
+
+	bool move = true;
+	for (auto const& go2 : mGameObject)
+	{
+		if (go2 != go)
+		{
+			calculeAABB(go2);
+			auto& aabb2 = gCoordinator.GetCompenent<AABB>(go2);
+
+			if((aabb.min.x<=aabb2.min.x && aabb.max.x>= aabb2.min.x ||
+				aabb.max.x>=aabb2.max.x && aabb.min.x<=aabb2.max.x ||
+				aabb.min.x>=aabb2.min.x && aabb.max.x <= aabb2.max.x) &&
+				(aabb.min.y<=aabb2.min.y && aabb.max.y>= aabb2.min.y ||
+				aabb.max.y>=aabb2.max.y && aabb.min.y<=aabb2.max.y ||
+				aabb.min.y>=aabb2.min.y && aabb.max.y <= aabb2.max.y) &&
+				(aabb.min.z<=aabb2.min.z && aabb.max.z>= aabb2.min.z ||
+				aabb.max.z>=aabb2.max.z && aabb.min.z<=aabb2.max.z ||
+				aabb.min.z>=aabb2.min.z && aabb.max.z <= aabb2.max.z )
+			){
+				std::cout << "passe : " << go << "\n";
+				move = false;
+			}
+		}
+	}
+	if (move) {
 		MakeMove(dt, go);
+	}
+
 }
 void PhysiqueSystem::calculeAABB(GameObject go)
 {
 	auto& aabb = gCoordinator.GetCompenent<AABB>(go);
 	auto& mesh = gCoordinator.GetCompenent<Mesh>(go);
 	auto& transform = gCoordinator.GetCompenent<Transform>(go);
-	
+
 	glm::vec3 max = mesh->getPostionVertex(0);
 	glm::vec3 min = mesh->getPostionVertex(0);
 
@@ -88,6 +126,7 @@ void PhysiqueSystem::calculeAABB(GameObject go)
 			min.z = tmp.z;
 	}
 
-	aabb.max = (max * transform.scale) + transform.translation;
-	aabb.min = (min * transform.scale) + transform.translation;
+	aabb.max = max * transform.scale + transform.translation;
+	aabb.min = min * transform.scale + transform.translation;
+
 }

@@ -45,12 +45,16 @@ namespace lve {
 			void bind(VkCommandBuffer commandBuffer);
 			void draw(VkCommandBuffer commandBuffer);
 
-			glm::vec3 getPostionVertex(int indice) {
+
+			glm::vec3 getPostionVertex(int indice)
+			{
 				return vertices[indice].position;
 			}
 
-			int getVertexSize() {
-				return vertices.size();
+			int getVertexSize()
+			{
+				return static_cast<uint32_t>(vertices.size());
+
 			}
 
 		private:
@@ -63,7 +67,6 @@ namespace lve {
 			std::unique_ptr<LveBuffer> indexBuffer;
 			uint32_t indexCount;
 
-			//ajout test
 			std::vector<Vertex> vertices;
 
 			void createVertexBuffers(const std::vector<Vertex>& vertices);
