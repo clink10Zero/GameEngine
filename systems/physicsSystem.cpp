@@ -61,7 +61,6 @@ void PhysiqueSystem::TestCollision(float dt, GameObject go)
 				aabb.max.z>=aabb2.max.z && aabb.min.z<=aabb2.max.z ||
 				aabb.min.z>=aabb2.min.z && aabb.max.z <= aabb2.max.z )
 			){
-				std::cout << "passe : " << go << "\n";
 				move = false;
 			}
 		}

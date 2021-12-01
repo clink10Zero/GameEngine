@@ -40,7 +40,7 @@ namespace lve {
 			void endSwapChainRenderPass(VkCommandBuffer commandBuffer);
 
 			//pour imgui
-			uint32_t getImageCount() const { return lveSwapChain->imageCount(); }
+			uint32_t getImageCount() const { return static_cast<uint32_t>(lveSwapChain->imageCount()); }
 		private:
 			void createCommandBuffers();
 			void freeCommandBuffers();
