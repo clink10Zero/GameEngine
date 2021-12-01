@@ -25,6 +25,18 @@
     <Filter Include="Fichiers sources\systems">
       <UniqueIdentifier>{0158b06d-e3c4-4807-99a2-f7147b5461cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\imgui">
+      <UniqueIdentifier>{922dba24-3413-48bb-9021-d10db2d214c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\imgui">
+      <UniqueIdentifier>{e9625afd-8dec-48f3-91b7-a225b8d8d070}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\imguiCustome">
+      <UniqueIdentifier>{ce5e6216-9702-49bd-8828-3d3578f2b61a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\imguiCustome">
+      <UniqueIdentifier>{02586944-d04b-4075-8185-639e07e0f236}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="first_app.cpp">
@@ -74,6 +86,33 @@
     </ClCompile>
     <ClCompile Include="systems\simple_render_system.cpp">
       <Filter>Fichiers sources\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="imguiLayer.cpp">
+      <Filter>Fichiers sources\imguiCustome</Filter>
+    </ClCompile>
+    <ClCompile Include="OffScreen.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_glfw.cpp">
+      <Filter>Fichiers sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_vulkan.cpp">
+      <Filter>Fichiers sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>Fichiers sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>Fichiers sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>Fichiers sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>Fichiers sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneHierarchy.cpp">
+      <Filter>Fichiers sources\imguiCustome</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +202,39 @@
     </ClInclude>
     <ClInclude Include="components\aabb.hpp">
       <Filter>Fichiers d%27en-tête\component</Filter>
+    </ClInclude>
+    <ClInclude Include="imguiLayer.hpp">
+      <Filter>Fichiers d%27en-tête\imguiCustome</Filter>
+    </ClInclude>
+    <ClInclude Include="OffScreen.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_glfw.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_vulkan.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneHierarchy.hpp">
+      <Filter>Fichiers d%27en-tête\imguiCustome</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

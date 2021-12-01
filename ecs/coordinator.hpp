@@ -53,7 +53,7 @@ class Coordinator
 		void RemoveComponent(GameObject go) {
 			mComponentManager->RemoveComponent<T>(go);
 
-			auto signature = mGameObjectManager<T>(go);
+			auto signature = mGameObjectManager->GetSignature(go);
 			signature.set(mComponentManager->GetComponentType<T>(), false);
 			mGameObjectManager->SetSignature(go, signature);
 

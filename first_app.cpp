@@ -1,8 +1,11 @@
 #include "first_app.hpp"
 
+#include "imgui/imgui_impl_vulkan.h"
+
 #include "lve_camera.hpp"
 #include "keyboard_movement_controller.hpp"
 #include "lve_buffer.hpp"
+#include "OffScreen.hpp"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -21,13 +24,14 @@
 
 #include "ecs/coordinator.hpp"
 
+#include "imguiLayer.hpp"
+
 // std
 #include <array>
 #include <stdexcept>
 #include <cassert>
 #include <chrono>
 
-#include <iostream>
 
 Coordinator gCoordinator;
 
@@ -81,12 +85,16 @@ namespace lve {
 
         }
 
-        SimpleRenderSystem simpleRenderSystem{ lveDevice,lveRenderer.getSwapChainRenderPass(),globalSetLayout->getDescriptorSetLayout() };
+        OffScreen screen(lveDevice, globalSetLayout->getDescriptorSetLayout());
+
+        SimpleRenderSystem simpleRenderSystem{ lveDevice, screen.GetRenderPass(), globalSetLayout->getDescriptorSetLayout() };
         LveCamera camera{};
 
         auto viewerObject = LveGameObject::createGameObject();
         viewerObject.transform.translation.z = -2.5f;
         KeyboardMovementController cameraController{};
+
+        Imgui m_Imgui{ lveWindow, lveDevice, lveRenderer.getSwapChainRenderPass(), lveRenderer.getImageCount()};
 
         auto currentTime = std::chrono::high_resolution_clock::now();
 
@@ -115,12 +123,27 @@ namespace lve {
                 uboBuffers[frameIndex]->writeToBuffer(&ubo);
                 uboBuffers[frameIndex]->flush();
 
-                lveRenderer.beginSwapChainRenderPass(commandBuffer);
+                screen.Start(frameInfo);
                 simpleRenderSystem.renderScene(frameInfo, racine);
+                screen.End(frameInfo);
+
+                //render
+                m_Imgui.newFrame();
+                lveRenderer.beginSwapChainRenderPass(commandBuffer);
+
+                ImGui::Begin("Viewport");
+                auto size = ImGui::GetWindowSize();
+                ImGui::Image((ImTextureID) ImGui_ImplVulkan_AddTexture(screen.GetSampler(), screen.GetImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL), { size.x, (size.y - 36.0f) });
+                ImGui::End();
+                
+                hierarchy.OnImGuiRender(racine);
+
+                m_Imgui.render(commandBuffer);
+
                 lveRenderer.endSwapChainRenderPass(commandBuffer);
                 lveRenderer.endFrame();
-            }
 
+            }
         }
         vkDeviceWaitIdle(lveDevice.device());
     }
@@ -172,6 +195,7 @@ namespace lve {
         gCoordinator.AddComponent<Mesh>(cube, (Mesh)LveModel::createModelFromFile(lveDevice, "models/colored_cube.obj"));
 
         Transform t_cube{};
+
         t_cube.translation = glm::vec3(0.f, 0.f, 0.f);
         t_cube.rotation = glm::vec3(0.f, 0.f, 0.f);
         t_cube.scale = glm::vec3(.5f, .5f, .5f);

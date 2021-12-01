@@ -20,6 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="first_app.cpp" />
+    <ClCompile Include="imguiLayer.cpp" />
+    <ClCompile Include="imgui\imgui.cpp" />
+    <ClCompile Include="imgui\imgui_draw.cpp" />
+    <ClCompile Include="imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="imgui\imgui_impl_vulkan.cpp" />
+    <ClCompile Include="imgui\imgui_tables.cpp" />
+    <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="keyboard_movement_controller.cpp" />
     <ClCompile Include="lve_buffer.cpp" />
     <ClCompile Include="lve_camera.cpp" />
@@ -32,6 +39,8 @@
     <ClCompile Include="lve_swap_chain.cpp" />
     <ClCompile Include="lve_window.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OffScreen.cpp" />
+    <ClCompile Include="sceneHierarchy.cpp" />
     <ClCompile Include="systems\graphSystem.cpp" />
     <ClCompile Include="systems\physicsSystem.cpp" />
     <ClCompile Include="systems\simple_render_system.cpp" />
@@ -49,6 +58,15 @@
     <ClInclude Include="ecs\systemManager.hpp" />
     <ClInclude Include="ecs\types.hpp" />
     <ClInclude Include="first_app.hpp" />
+    <ClInclude Include="imguiLayer.hpp" />
+    <ClInclude Include="imgui\imconfig.h" />
+    <ClInclude Include="imgui\imgui.h" />
+    <ClInclude Include="imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="imgui\imgui_impl_vulkan.h" />
+    <ClInclude Include="imgui\imgui_internal.h" />
+    <ClInclude Include="imgui\imstb_rectpack.h" />
+    <ClInclude Include="imgui\imstb_textedit.h" />
+    <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="keyboard_movement_controller.hpp" />
     <ClInclude Include="lve_buffer.hpp" />
     <ClInclude Include="lve_camera.hpp" />
@@ -62,6 +80,8 @@
     <ClInclude Include="lve_swap_chain.hpp" />
     <ClInclude Include="lve_utils.hpp" />
     <ClInclude Include="lve_window.hpp" />
+    <ClInclude Include="OffScreen.hpp" />
+    <ClInclude Include="sceneHierarchy.hpp" />
     <ClInclude Include="systems\graphSystem.hpp" />
     <ClInclude Include="systems\physicsSystem.hpp" />
     <ClInclude Include="systems\simple_render_system.hpp" />

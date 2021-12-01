@@ -8,7 +8,7 @@
 #include "lve_descriptors.hpp"
 
 #include "./ecs/coordinator.hpp"
-
+#include "sceneHierarchy.hpp"
 
 // std
 #include <memory>
@@ -17,8 +17,8 @@
 namespace lve {
 	class FirstApp {
 	 public:
-		static constexpr int WIDTH = 800;
-		static constexpr int HEIGHT = 600;
+		static constexpr int WIDTH = 1280;
+		static constexpr int HEIGHT = 720;
 
 		FirstApp();
 		~FirstApp();
@@ -37,6 +37,7 @@ namespace lve {
 		LveDevice lveDevice{lveWindow};
 		LveRenderer lveRenderer{ lveWindow, lveDevice };
 		std::unique_ptr<LveDescriptorPool> globalPool{};
-		//std::vector<LveGameObject> gameObjects;
+
+		SceneHierarchyPanel hierarchy{};
 	};
 }  // namespace lve
