@@ -21,6 +21,7 @@
 #include "systems/graphSystem.hpp"
 #include "systems/physicsSystem.hpp"
 #include "systems/simple_render_system.hpp"
+#include "systems/collider_render_system.hpp"
 
 #include "ecs/coordinator.hpp"
 
@@ -88,6 +89,7 @@ namespace lve {
         OffScreen screen(lveDevice, globalSetLayout->getDescriptorSetLayout());
 
         SimpleRenderSystem simpleRenderSystem{ lveDevice, screen.GetRenderPass(), globalSetLayout->getDescriptorSetLayout() };
+        ColliderRenderSystem colliderRenderSystem{ lveDevice, screen.GetRenderPass(), globalSetLayout->getDescriptorSetLayout() };
         LveCamera camera{};
 
         auto viewerObject = LveGameObject::createGameObject();
@@ -125,6 +127,7 @@ namespace lve {
 
                 screen.Start(frameInfo);
                 simpleRenderSystem.renderScene(frameInfo, racine);
+                colliderRenderSystem.renderScene(frameInfo, racine);
                 screen.End(frameInfo);
 
                 //render
@@ -203,14 +206,29 @@ namespace lve {
         gCoordinator.AddComponent<Transform>(cube, t_cube);
 
         RigidBody rb_cube{};
-
         rb_cube.forceGravity = glm::vec3{ 0.f, 9.f, 0.f };
-
         gCoordinator.AddComponent<RigidBody>(cube, rb_cube);
 
         gCoordinator.AddComponent<AABB>(cube, AABB{});
 
         Graph g_cube{};
+
+        GameObject vase = gCoordinator.CreateGameObject();
+        gCoordinator.AddComponent<Mesh>(vase, (Mesh)LveModel::createModelFromFile(lveDevice, "models/smooth_vase.obj"));
+
+        Transform t_vase{};
+        t_vase.translation = glm::vec3(0.f, -1.f, 0.f);
+        t_vase.rotation = glm::vec3(0.f, 0.f, 0.f);
+        t_vase.scale = glm::vec3(1.f, 1.f, 1.f);
+        gCoordinator.AddComponent<Transform>(vase, t_vase);
+
+        RigidBody rb_vase{};
+        rb_vase.forceGravity = { 0.f, 9.f, 0.f };
+        gCoordinator.AddComponent<RigidBody>(vase, rb_vase);
+
+        gCoordinator.AddComponent<AABB>(vase, AABB{});
+
+        Graph g_vase{};
 
         GameObject floor = gCoordinator.CreateGameObject();
         gCoordinator.AddComponent<Mesh>(floor, (Mesh)LveModel::createModelFromFile(lveDevice, "models/colored_cube.obj"));
@@ -227,11 +245,15 @@ namespace lve {
         Graph g_floor{};
 
         g_racine.children.push_back(cube);
+        g_racine.children.push_back(vase);
         g_racine.children.push_back(floor);
+
         gCoordinator.AddComponent<Graph>(racine, g_racine);
         g_cube.parent = racine;
         gCoordinator.AddComponent<Graph>(cube, g_cube);
         g_floor.parent = racine;
         gCoordinator.AddComponent<Graph>(floor, g_floor);
+        g_vase.parent = racine;
+        gCoordinator.AddComponent<Graph>(vase, g_vase);
     }
 }
