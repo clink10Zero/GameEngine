@@ -31,7 +31,7 @@ namespace lve {
 				std::vector<Vertex> vertices{};
 				std::vector<uint32_t> indices{};
 
-				void loadModel(const std::string& filepath);
+				void loadModel(const std::string& filepath, int lod);
 			};
 
 			LveModel(LveDevice& device, const LveModel::Builder &builder);
@@ -40,7 +40,7 @@ namespace lve {
 			LveModel(const LveModel&) = delete;
 			LveModel& operator=(const LveModel&) = delete;
 
-			static std::unique_ptr<LveModel> createModelFromFile(LveDevice& device, const std::string& filepath);
+			static std::unique_ptr<LveModel> createModelFromFile(LveDevice& device, const std::string& filepath, int lod);
 
 			void bind(VkCommandBuffer commandBuffer);
 			void draw(VkCommandBuffer commandBuffer);

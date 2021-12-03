@@ -97,6 +97,7 @@ Transform GraphSystem::combineWith(Transform self, Transform t)
 	result.scale = self.scale * t.scale;
 	return result;
 }
+
 Transform GraphSystem::interpolate_with(Transform self, Transform t, float time)
 {
 	Transform result{};
@@ -105,3 +106,5 @@ Transform GraphSystem::interpolate_with(Transform self, Transform t, float time)
 	result.translation = self.translation + (t.translation * time);
 	return result;
 }
+
+Transform getWorldPosition;

@@ -21,6 +21,8 @@
 #include "systems/graphSystem.hpp"
 #include "systems/physicsSystem.hpp"
 #include "systems/simple_render_system.hpp"
+#include "systems/gridSystem.hpp"
+#include "systems/collider_render_system.hpp"
 
 #include "ecs/coordinator.hpp"
 
@@ -88,6 +90,10 @@ namespace lve {
         OffScreen screen(lveDevice, globalSetLayout->getDescriptorSetLayout());
 
         SimpleRenderSystem simpleRenderSystem{ lveDevice, screen.GetRenderPass(), globalSetLayout->getDescriptorSetLayout() };
+
+        //GridSystem gridsystem{ lveDevice,screen.GetRenderPass(), globalSetLayout->getDescriptorSetLayout() };
+        ColliderRenderSystem colliderRenderSystem{ lveDevice, screen.GetRenderPass(), globalSetLayout->getDescriptorSetLayout() };
+
         LveCamera camera{};
 
         auto viewerObject = LveGameObject::createGameObject();
@@ -111,8 +117,10 @@ namespace lve {
             float aspect = lveRenderer.getAspectRatio();
 
             camera.setPerspectiveProjection(glm::radians(50.f), aspect, .1f, 100.f);
-
-            physicsSystem->Update(frameTime);
+            if (!editor)
+            {
+                physicsSystem->Update(frameTime);
+            }
 
             if (auto commandBuffer = lveRenderer.beginFrame()) {
                 int frameIndex = lveRenderer.getFrameIndex();
@@ -125,14 +133,39 @@ namespace lve {
 
                 screen.Start(frameInfo);
                 simpleRenderSystem.renderScene(frameInfo, racine);
+                //gridsystem.render(frameInfo);
+                colliderRenderSystem.renderScene(frameInfo, racine);
                 screen.End(frameInfo);
 
                 //render
                 m_Imgui.newFrame();
                 lveRenderer.beginSwapChainRenderPass(commandBuffer);
-
-                ImGui::Begin("Viewport");
+                
+                //fenêtre principal
+                ImGui::Begin("Game");
+                float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
                 auto size = ImGui::GetWindowSize();
+                size.y -= lineHeight - 2.0f;
+                
+                if (ImGui::Button(playLabel.c_str(), ImVec2{ lineHeight - (size.x / 2.0f), lineHeight }))
+                {
+                    if (editor)
+                    {
+                        editor = false;
+                        playLabel = "Pause";
+                        //TODO copy coordinator
+                        gCoordinatorSaveEditor = gCoordinator;
+                    }
+                    else
+                    {
+                        editor = true;
+                        playLabel = "Play";
+                        //TODO copy coordinator
+                        gCoordinator = gCoordinator;
+                    }
+                }
+
+                ImGui::Separator();
                 ImGui::Image((ImTextureID) ImGui_ImplVulkan_AddTexture(screen.GetSampler(), screen.GetImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL), { size.x, (size.y - 36.0f) });
                 ImGui::End();
                 
@@ -191,29 +224,38 @@ namespace lve {
 
         gCoordinator.AddComponent<Transform>(racine, t_racine);
 
-        GameObject cube = gCoordinator.CreateGameObject();
-        gCoordinator.AddComponent<Mesh>(cube, (Mesh)LveModel::createModelFromFile(lveDevice, "models/colored_cube.obj"));
+        GameObject wolf = gCoordinator.CreateGameObject();
+        Mesh m_wolf;
+        m_wolf.path = "models/Wolf_obj.obj";
+        m_wolf.lod = 0;
+        m_wolf.data = LveModel::createModelFromFile(lveDevice, m_wolf.path, m_wolf.lod);
+        gCoordinator.AddComponent<Mesh>(wolf, m_wolf);
 
-        Transform t_cube{};
+        Transform t_wolf{};
 
-        t_cube.translation = glm::vec3(0.f, 0.f, 0.f);
-        t_cube.rotation = glm::vec3(0.f, 0.f, 0.f);
-        t_cube.scale = glm::vec3(.5f, .5f, .5f);
+        t_wolf.translation = glm::vec3(0.f, 0.f, 0.f);
+        t_wolf.rotation = glm::vec3(0.f, 0.f, 0.f);
+        t_wolf.scale = glm::vec3(1.f, 1.f, 1.f);
 
-        gCoordinator.AddComponent<Transform>(cube, t_cube);
+        gCoordinator.AddComponent<Transform>(wolf, t_wolf);
 
-        RigidBody rb_cube{};
+        RigidBody rb_wolf{};
 
-        rb_cube.forceGravity = glm::vec3{ 0.f, 9.f, 0.f };
+        rb_wolf.forceGravity = glm::vec3{ 0.f, 9.f, 0.f };
 
-        gCoordinator.AddComponent<RigidBody>(cube, rb_cube);
+        gCoordinator.AddComponent<RigidBody>(wolf, rb_wolf);
 
-        gCoordinator.AddComponent<AABB>(cube, AABB{});
+        gCoordinator.AddComponent<AABB>(wolf, AABB{});
 
-        Graph g_cube{};
-
+        Graph g_wolf{};
+        
         GameObject floor = gCoordinator.CreateGameObject();
-        gCoordinator.AddComponent<Mesh>(floor, (Mesh)LveModel::createModelFromFile(lveDevice, "models/colored_cube.obj"));
+        Mesh m_floor{};
+        m_floor.path = "models/colored_cube.obj";
+        m_floor.lod = 0;
+        m_floor.data = LveModel::createModelFromFile(lveDevice, m_floor.path, m_floor.lod);
+
+        gCoordinator.AddComponent<Mesh>(floor, m_floor);
 
         Transform t_floor{};
         t_floor.translation = glm::vec3(0.f, 2.f, 0.f);
@@ -226,11 +268,13 @@ namespace lve {
 
         Graph g_floor{};
 
-        g_racine.children.push_back(cube);
+        g_racine.children.push_back(wolf);
+
         g_racine.children.push_back(floor);
+
         gCoordinator.AddComponent<Graph>(racine, g_racine);
-        g_cube.parent = racine;
-        gCoordinator.AddComponent<Graph>(cube, g_cube);
+        g_wolf.parent = racine;
+        gCoordinator.AddComponent<Graph>(wolf, g_wolf);
         g_floor.parent = racine;
         gCoordinator.AddComponent<Graph>(floor, g_floor);
     }

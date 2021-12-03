@@ -31,11 +31,11 @@
     <Filter Include="Fichiers sources\imgui">
       <UniqueIdentifier>{e9625afd-8dec-48f3-91b7-a225b8d8d070}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\imguiCustome">
-      <UniqueIdentifier>{ce5e6216-9702-49bd-8828-3d3578f2b61a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers sources\imguiCustome">
+    <Filter Include="Fichiers sources\imguiCustom">
       <UniqueIdentifier>{02586944-d04b-4075-8185-639e07e0f236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\imguiCustom">
+      <UniqueIdentifier>{ce5e6216-9702-49bd-8828-3d3578f2b61a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -88,7 +88,7 @@
       <Filter>Fichiers sources\systems</Filter>
     </ClCompile>
     <ClCompile Include="imguiLayer.cpp">
-      <Filter>Fichiers sources\imguiCustome</Filter>
+      <Filter>Fichiers sources\imguiCustom</Filter>
     </ClCompile>
     <ClCompile Include="OffScreen.cpp">
       <Filter>Fichiers sources</Filter>
@@ -112,7 +112,10 @@
       <Filter>Fichiers sources\imgui</Filter>
     </ClCompile>
     <ClCompile Include="sceneHierarchy.cpp">
-      <Filter>Fichiers sources\imguiCustome</Filter>
+      <Filter>Fichiers sources\imguiCustom</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\gridSystem.cpp">
+      <Filter>Fichiers sources\systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -204,7 +207,7 @@
       <Filter>Fichiers d%27en-tête\component</Filter>
     </ClInclude>
     <ClInclude Include="imguiLayer.hpp">
-      <Filter>Fichiers d%27en-tête\imguiCustome</Filter>
+      <Filter>Fichiers d%27en-tête\imguiCustom</Filter>
     </ClInclude>
     <ClInclude Include="OffScreen.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
@@ -234,7 +237,10 @@
       <Filter>Fichiers d%27en-tête\imgui</Filter>
     </ClInclude>
     <ClInclude Include="sceneHierarchy.hpp">
-      <Filter>Fichiers d%27en-tête\imguiCustome</Filter>
+      <Filter>Fichiers d%27en-tête\imguiCustom</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\gridSystem.hpp">
+      <Filter>Fichiers d%27en-tête\systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -248,6 +254,12 @@
       <Filter>Fichiers de ressources</Filter>
     </None>
     <None Include="shaders\simple_shader.vert.spv">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="shaders\grid.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="shaders\grid.frag">
       <Filter>Fichiers de ressources</Filter>
     </None>
   </ItemGroup>

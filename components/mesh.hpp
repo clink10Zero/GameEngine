@@ -4,4 +4,9 @@
 
 using namespace lve;
 
-using Mesh = std::shared_ptr<LveModel>;
+struct Mesh
+{
+	std::string path;
+	std::shared_ptr<LveModel> data;
+	int lod = 0;
+};

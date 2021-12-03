@@ -5,7 +5,11 @@
 #include "./SystemManager.hpp"
 #include "./Types.hpp"
 
+//for destroyed
+#include "../components/graph.hpp"
+
 #include <memory>
+#include <vector>
 
 class Coordinator
 {
@@ -25,6 +29,22 @@ class Coordinator
 
 		void DestroyedGameObject(GameObject go)
 		{
+			/*
+			if (this->HaveComponent<Graph>(go))
+			{
+				Graph g = this->GetCompenent<Graph>(go);
+				if (this->HaveComponent<Graph>(g.parent))
+				{
+					Graph gp = this->GetCompenent<Graph>(g.parent);
+
+					gp.children.erase(std::remove(gp.children.begin(), gp.children.end(), 8), gp.children.end());
+
+					for (auto& obj : g.children) {
+						DestroyedGameObject(obj);
+					}
+				}
+			}
+			*/
 			mGameObjectManager->DestroyedGameObject(go);
 			mComponentManager->GameObjectDestroyed(go);
 			mSystemManager->GameObjectDestroyed(go);
@@ -92,7 +112,7 @@ class Coordinator
 		}
 
 	private:
-		std::unique_ptr<ComponentManager> mComponentManager;
-		std::unique_ptr<GameObjectManager> mGameObjectManager;
-		std::unique_ptr<SystemManager> mSystemManager;
+		std::shared_ptr<ComponentManager> mComponentManager;
+		std::shared_ptr<GameObjectManager> mGameObjectManager;
+		std::shared_ptr<SystemManager> mSystemManager;
 };

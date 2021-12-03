@@ -10,7 +10,7 @@
 #include <cassert>
 #include <cstring>
 #include <unordered_map>
-
+#include <map>
 namespace std {
 	template <>
 	struct hash<lve::LveModel::Vertex> {
@@ -31,9 +31,9 @@ namespace lve {
 
 	LveModel::~LveModel() {}
 
-	std::unique_ptr<LveModel> LveModel::createModelFromFile(LveDevice& device, const std::string& filepath) {
+	std::unique_ptr<LveModel> LveModel::createModelFromFile(LveDevice& device, const std::string& filepath, int lod) {
 		Builder builder;
-		builder.loadModel(filepath);
+		builder.loadModel(filepath, lod);
 		return std::make_unique<LveModel>(device, builder);
 	}
 
@@ -135,7 +135,7 @@ namespace lve {
 	}
 
 
-	void LveModel::Builder::loadModel(const std::string& filepath) {
+	void LveModel::Builder::loadModel(const std::string& filepath, int lod) {
 		tinyobj::attrib_t attrib;
 		std::vector<tinyobj::shape_t> shapes;
 		std::vector<tinyobj::material_t> materials;
@@ -188,6 +188,71 @@ namespace lve {
 				}
 				indices.push_back(uniqueVertices[vertex]);
 			}
+		}
+		//TODO lod pour tp
+		if (lod > 0)
+		{
+			
+			glm::vec3 max = vertices[0].position;
+			glm::vec3 min = vertices[0].position;
+
+			for (int i = 0; i < vertices.size(); i++) {
+				glm::vec3 tmp = vertices[i].position;
+
+				if (max.x < tmp.x)
+					max.x = tmp.x;
+				if (max.y < tmp.y)
+					max.y = tmp.y;
+				if (max.z < tmp.z)
+					max.z = tmp.z;
+
+				if (min.x > tmp.x)
+					min.x = tmp.x;
+				if (min.y > tmp.y)
+					min.y = tmp.y;
+				if (min.z > tmp.z)
+					min.z = tmp.z;
+			}
+			
+			glm::vec3 gridCenter = (min + max) / 2.0f;
+			min -= 0.1f * (min - gridCenter);
+			max += 0.1f * (max - gridCenter);
+			
+			int TAILLE = 16 * pow(2, lod);
+			float pasX = (max.x - min.x) / TAILLE;
+			float pasY = (max.y - min.y) / TAILLE;
+			float pasZ = (max.z - min.z) / TAILLE;
+
+			std::vector<glm::vec3> grille;
+			
+			for (int x = 0; x < TAILLE; x++)
+			{
+				for (int y = 0; y < TAILLE; y++)
+				{
+					for (int z = 0; z < TAILLE; z++)
+					{
+						grille.push_back(glm::vec3{0.f, 0.f, 0.f});
+					}
+				}
+			}
+			
+			std::map<glm::vec3, glm::vec3> link;
+			
+			for (int i = 0; i < vertices.size(); i++)
+			{
+				glm::vec3 tmp = vertices[i].position;
+				float x = tmp.x / pasX;
+				float y = tmp.y / pasY;
+				float z = tmp.z / pasZ;
+				//calcul de la moyenne
+				grille[(x * TAILLE * TAILLE) + (y * TAILLE) + z] = (grille[(x * TAILLE * TAILLE) + (y * TAILLE) + z] + tmp) / 2.f;
+				glm::vec3 indiceG{};
+				indiceG.x = x;
+				indiceG.y = y;
+				indiceG.z = z;
+				//link[tmp] = indiceG;
+			}
+			
 		}
 	}
 }

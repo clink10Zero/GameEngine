@@ -42,6 +42,7 @@
     <ClCompile Include="OffScreen.cpp" />
     <ClCompile Include="sceneHierarchy.cpp" />
     <ClCompile Include="systems\graphSystem.cpp" />
+    <ClCompile Include="systems\gridSystem.cpp" />
     <ClCompile Include="systems\physicsSystem.cpp" />
     <ClCompile Include="systems\simple_render_system.cpp" />
   </ItemGroup>
@@ -83,11 +84,14 @@
     <ClInclude Include="OffScreen.hpp" />
     <ClInclude Include="sceneHierarchy.hpp" />
     <ClInclude Include="systems\graphSystem.hpp" />
+    <ClInclude Include="systems\gridSystem.hpp" />
     <ClInclude Include="systems\physicsSystem.hpp" />
     <ClInclude Include="systems\simple_render_system.hpp" />
     <ClInclude Include="systems\system.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shaders\grid.frag" />
+    <None Include="shaders\grid.vert" />
     <None Include="shaders\simple_shader.frag" />
     <None Include="shaders\simple_shader.frag.spv" />
     <None Include="shaders\simple_shader.vert" />

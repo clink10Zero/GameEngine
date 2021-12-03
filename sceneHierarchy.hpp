@@ -17,9 +17,7 @@ namespace lve {
         void OnImGuiRender(GameObject racine);
 
         GameObject GetSelectedEntity() const { return selected; }
-        void SetSelectedEntity(GameObject go);
     private:
-        void OnImGuiGameObject(GameObject go);
         
         void DrawEntityNode(GameObject go);
         void DrawComponents(GameObject go);

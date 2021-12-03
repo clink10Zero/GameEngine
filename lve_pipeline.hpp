@@ -13,6 +13,8 @@ namespace lve {
 		PipelineConfigInfo(const PipelineConfigInfo&) = delete;
 		PipelineConfigInfo& operator=(const PipelineConfigInfo&) = delete;
 
+		std::vector<VkVertexInputBindingDescription> bindingDescriptions;
+		std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
 		VkPipelineViewportStateCreateInfo viewportInfo;
 		VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
 		VkPipelineRasterizationStateCreateInfo rasterizationInfo;
@@ -41,7 +43,7 @@ namespace lve {
 
 			void bind(VkCommandBuffer commandBuffer);
 
-			static void defaultPipelineConfigInfo(PipelineConfigInfo& configInfo);
+			static void defaultPipelineConfigInfo(PipelineConfigInfo& configInfo, VkPolygonMode mode);
 
 		private:
 			static std::vector<char> readFile(const std::string& filepath);

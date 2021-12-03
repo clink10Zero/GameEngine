@@ -59,7 +59,7 @@ namespace lve {
         assert(pipelineLayout != nullptr && "Cannnot create pipelinebefore pipeline layout");
 
         PipelineConfigInfo pipelineConfig{};
-        LvePipeline::defaultPipelineConfigInfo(pipelineConfig);
+        LvePipeline::defaultPipelineConfigInfo(pipelineConfig,VK_POLYGON_MODE_FILL);
         pipelineConfig.renderPass = renderPass;
         pipelineConfig.pipelineLayout = pipelineLayout;
         lvePipeline = std::make_unique<LvePipeline>(
@@ -92,8 +92,8 @@ namespace lve {
         push.normalMatrix = graphSystem.normalWorldMatrix(worldTransform);
 
         vkCmdPushConstants(frameInfo.commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SimplePushConstantData), &push);
-        m->bind(frameInfo.commandBuffer);
-        m->draw(frameInfo.commandBuffer);
+        m.data->bind(frameInfo.commandBuffer);
+        m.data->draw(frameInfo.commandBuffer);
 
         Graph g = gCoordinator.GetCompenent<Graph>(gameObject);
         for (auto& obj : g.children) {

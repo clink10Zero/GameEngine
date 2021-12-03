@@ -14,7 +14,7 @@ void SceneHierarchyPanel::OnImGuiRender(GameObject racine)
 
 	for (auto& go : g.children)
 	{
-		OnImGuiGameObject(go);
+		DrawEntityNode(go);
 	}
 	ImGui::End();
 
@@ -23,16 +23,6 @@ void SceneHierarchyPanel::OnImGuiRender(GameObject racine)
 		ImGui::Begin("component");
 		DrawComponents(selected);
 		ImGui::End();
-	}
-}
-void SceneHierarchyPanel::OnImGuiGameObject(GameObject go)
-{
-	DrawEntityNode(go);
-	Graph g = gCoordinator.GetCompenent<Graph>(go);
-
-	for (auto& cgo : g.children)
-	{
-		OnImGuiGameObject(cgo);
 	}
 }
 
@@ -57,8 +47,15 @@ void SceneHierarchyPanel::DrawEntityNode(GameObject go)
 	if (opened) {
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 		bool opened = ImGui::TreeNodeEx((void*)9817239, flags, std::to_string(go).c_str());
-		if (opened)
+		if (opened) {
+			Graph g = gCoordinator.GetCompenent<Graph>(go);
+
+			for (auto& cgo : g.children)
+			{
+				DrawEntityNode(cgo);
+			}
 			ImGui::TreePop();
+		}
 		ImGui::TreePop();
 	}
 
@@ -91,15 +88,16 @@ void SceneHierarchyPanel::DrawComponents(GameObject go)
 	DrawComponent<Transform>("Transform", go, false, [](auto& component)
 	{
 		DrawVec3Control("Translation", component.translation, 0.0f, 100.f);
-		glm::vec3 rotation = component.rotation;
+		glm::vec3 rotation = glm::degrees(component.rotation);
 		DrawVec3Control("Rotation", rotation, 0.0f, 100.f);
-		component.rotation = rotation;
+		component.rotation = glm::radians(rotation);
 		DrawVec3Control("Scale", component.scale, 1.0f, 100.f);
 	});
 
+	//TODO input pour modification direct
 	DrawComponent<Graph>("Graph", go, false, [](auto& component)
 	{
-		ImGui::Text(("parent : " + std::to_string(component.parent)).c_str());
+		ImGui::Text(("Parent : " + std::to_string(component.parent)).c_str());
 		for (int i = 0; i < component.children.size(); i++)
 		{
 			ImGui::Text((std::to_string(i) + " - gameobject " + std::to_string(component.children[i])).c_str());
@@ -108,10 +106,24 @@ void SceneHierarchyPanel::DrawComponents(GameObject go)
 
 	DrawComponent<AABB>("AABB", go, true, [](auto& component)
 	{
-		DrawVec3Control("min", component.min, -100.f, 100.f);
-		DrawVec3Control("max", component.max, -100.f, 100.f);
+		DrawVec3Control("Min", component.min, -100.f, 100.f);
+		DrawVec3Control("Max", component.max, -100.f, 100.f);
 	});
 
+	DrawComponent<RigidBody>("RigideBody", go, true, [](auto& component)
+	{
+		DrawVec3Control("Velocity", component.velocity, -100.f, 100.f);
+		DrawVec3Control("Acceleration", component.acceleration, -100.f, 100.f);
+		DrawVec3Control("Gravity Force", component.forceGravity, -100.f, 100.f);
+	});
+
+	DrawComponent<Mesh>("Mesh", go, true, [](auto& component)
+	{
+		std::string old_path = component.path;
+		int old_lod = component.lod;
+		ImGui::Text(component.path.c_str());
+		ImGui::SliderInt("LOD : ", &component.lod, 0, 3);
+	});
 }
 
 template<typename T, typename UIFunction>
@@ -152,7 +164,12 @@ void SceneHierarchyPanel::DrawComponent(const std::string& name, GameObject go, 
 		}
 
 		if (removeComponent)
+		{
+			if (gCoordinator.HaveComponent<Mesh>(go) && strcmp(typeid(T).name(),"Mesh")) {
+				gCoordinator.RemoveComponent<AABB>(go);
+			}
 			gCoordinator.RemoveComponent<T>(go);
+		}
 	}
 }
 
