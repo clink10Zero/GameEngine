@@ -37,7 +37,7 @@ namespace lve {
         assert(pipelineLayout != VK_NULL_HANDLE && "Cannot create pipeline before pipeline layout");
 
         PipelineConfigInfo configInfo{};
-        LvePipeline::defaultPipelineConfigInfo(configInfo);
+        LvePipeline::defaultPipelineConfigInfo(configInfo, VK_POLYGON_MODE_LINE);
         configInfo.renderPass = renderPass;
         configInfo.pipelineLayout = pipelineLayout;
         configInfo.bindingDescriptions.clear();

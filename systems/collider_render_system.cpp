@@ -60,7 +60,7 @@ namespace lve {
         assert(pipelineLayout != nullptr && "Cannnot create pipelinebefore pipeline layout");
 
         PipelineConfigInfo pipelineConfig{};
-        LvePipeline::defaultPipelineConfigInfo(pipelineConfig,VK_POLYGON_MODE_LINE);
+        LvePipeline::defaultPipelineConfigInfo(pipelineConfig, VK_POLYGON_MODE_LINE);
         pipelineConfig.renderPass = renderPass;
         pipelineConfig.pipelineLayout = pipelineLayout;
         lvePipeline = std::make_unique<LvePipeline>(
@@ -88,16 +88,16 @@ namespace lve {
     void ColliderRenderSystem::renderCollider(FrameInfo& frameInfo, GameObject gameObject, Transform parentTransform) {
         Transform t = gCoordinator.GetCompenent<Transform>(gameObject);
         auto worldTransform = graphSystem.combineWith(t, parentTransform);
-        
-        Mesh m = createAABBModel(gCoordinator.GetCompenent<AABB>(gameObject));
+        Mesh m{};
+        m.data = createAABBModel(gCoordinator.GetCompenent<AABB>(gameObject));
 
         SimplePushConstantData push{};
         push.modelMatrix = glm::mat4{ 1.f };
         push.normalMatrix = glm::mat4{ 1.f };
 
         vkCmdPushConstants(frameInfo.commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SimplePushConstantData), &push);
-        m->bind(frameInfo.commandBuffer);
-        m->draw(frameInfo.commandBuffer);
+        m.data->bind(frameInfo.commandBuffer);
+        m.data->draw(frameInfo.commandBuffer);
 
         Graph g = gCoordinator.GetCompenent<Graph>(gameObject);
         for (auto& obj : g.children) {

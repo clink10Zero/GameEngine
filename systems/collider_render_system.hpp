@@ -29,7 +29,7 @@ namespace lve {
 			void renderScene(FrameInfo& frameInfo, GameObject racine);
 			void renderCollider(FrameInfo& frameInfo, GameObject gameObject, Transform parent);
 
-			std::unique_ptr<LveModel>  createAABBModel(AABB aabb);
+			std::unique_ptr<LveModel> createAABBModel(AABB aabb);
 
 		private:
 			void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);

@@ -41,6 +41,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OffScreen.cpp" />
     <ClCompile Include="sceneHierarchy.cpp" />
+    <ClCompile Include="systems\collider_render_system.cpp" />
     <ClCompile Include="systems\graphSystem.cpp" />
     <ClCompile Include="systems\gridSystem.cpp" />
     <ClCompile Include="systems\physicsSystem.cpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="lve_window.hpp" />
     <ClInclude Include="OffScreen.hpp" />
     <ClInclude Include="sceneHierarchy.hpp" />
+    <ClInclude Include="systems\collider_render_system.hpp" />
     <ClInclude Include="systems\graphSystem.hpp" />
     <ClInclude Include="systems\gridSystem.hpp" />
     <ClInclude Include="systems\physicsSystem.hpp" />

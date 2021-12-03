@@ -93,7 +93,6 @@ namespace lve {
 
         //GridSystem gridsystem{ lveDevice,screen.GetRenderPass(), globalSetLayout->getDescriptorSetLayout() };
         ColliderRenderSystem colliderRenderSystem{ lveDevice, screen.GetRenderPass(), globalSetLayout->getDescriptorSetLayout() };
-        ColliderRenderSystem colliderRenderSystem{ lveDevice, screen.GetRenderPass(), globalSetLayout->getDescriptorSetLayout() };
 
         LveCamera camera{};
 
@@ -270,7 +269,6 @@ namespace lve {
         Graph g_floor{};
 
         g_racine.children.push_back(wolf);
-        g_racine.children.push_back(vase);
         g_racine.children.push_back(floor);
 
         gCoordinator.AddComponent<Graph>(racine, g_racine);
@@ -278,7 +276,5 @@ namespace lve {
         gCoordinator.AddComponent<Graph>(wolf, g_wolf);
         g_floor.parent = racine;
         gCoordinator.AddComponent<Graph>(floor, g_floor);
-        g_vase.parent = racine;
-        gCoordinator.AddComponent<Graph>(vase, g_vase);
     }
 }
