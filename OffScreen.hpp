@@ -45,6 +45,7 @@ namespace lve {
             VkSampler GetSampler() { return pass.sampler; }
             VkImageView GetImageView() { return pass.color.view; }
             VkRenderPass GetRenderPass() { return pass.renderPass; }
+
             void SetViewportSize(const glm::vec2& size) { pass.width = static_cast<uint32_t>(size.x); pass.height = static_cast<uint32_t>(size.y); }
 
             void Start(FrameInfo frameInfo);

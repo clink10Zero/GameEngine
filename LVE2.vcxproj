@@ -39,7 +39,9 @@
     <ClCompile Include="lve_swap_chain.cpp" />
     <ClCompile Include="lve_window.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="menu.cpp" />
     <ClCompile Include="OffScreen.cpp" />
+    <ClCompile Include="projectSettingGUI.cpp" />
     <ClCompile Include="sceneHierarchy.cpp" />
     <ClCompile Include="systems\collider_render_system.cpp" />
     <ClCompile Include="systems\graphSystem.cpp" />
@@ -82,7 +84,11 @@
     <ClInclude Include="lve_swap_chain.hpp" />
     <ClInclude Include="lve_utils.hpp" />
     <ClInclude Include="lve_window.hpp" />
+    <ClInclude Include="menu.hpp" />
     <ClInclude Include="OffScreen.hpp" />
+    <ClInclude Include="print.hpp" />
+    <ClInclude Include="projectSetting.hpp" />
+    <ClInclude Include="projectSettingGUI.hpp" />
     <ClInclude Include="sceneHierarchy.hpp" />
     <ClInclude Include="systems\collider_render_system.hpp" />
     <ClInclude Include="systems\graphSystem.hpp" />
@@ -93,7 +99,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\grid.frag" />
+    <None Include="shaders\grid.frag.spv" />
     <None Include="shaders\grid.vert" />
+    <None Include="shaders\grid.vert.spv" />
     <None Include="shaders\simple_shader.frag" />
     <None Include="shaders\simple_shader.frag.spv" />
     <None Include="shaders\simple_shader.vert" />

@@ -59,14 +59,14 @@ namespace lve {
         assert(pipelineLayout != nullptr && "Cannnot create pipelinebefore pipeline layout");
 
         PipelineConfigInfo pipelineConfig{};
-        LvePipeline::defaultPipelineConfigInfo(pipelineConfig,VK_POLYGON_MODE_FILL);
+        LvePipeline::defaultPipelineConfigInfo(pipelineConfig, VK_POLYGON_MODE_FILL);
         pipelineConfig.renderPass = renderPass;
         pipelineConfig.pipelineLayout = pipelineLayout;
         lvePipeline = std::make_unique<LvePipeline>(
             lveDevice,
             "shaders/simple_shader.vert.spv",
             "shaders/simple_shader.frag.spv",
-            pipelineConfig);
+            pipelineConfig, true);
     }
 
     void SimpleRenderSystem::renderScene(FrameInfo& frameInfo, GameObject racine) {

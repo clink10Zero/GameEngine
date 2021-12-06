@@ -2,27 +2,36 @@
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
+#include "print.hpp"
 
 #include <string.h>
 
+using namespace printGUI;
+
 extern Coordinator gCoordinator;
+
+extern Print affichage;
 
 void SceneHierarchyPanel::OnImGuiRender(GameObject racine)
 {
-	ImGui::Begin("Scene Hierarchy");
-	Graph g = gCoordinator.GetCompenent<Graph>(racine);
-
-	for (auto& go : g.children)
+	if (affichage.hierarchy)
 	{
-		DrawEntityNode(go);
-	}
-	ImGui::End();
+		ImGui::Begin("Scene Hierarchy");
+		Graph g = gCoordinator.GetCompenent<Graph>(racine);
 
-	if (selected)
-	{
-		ImGui::Begin("component");
-		DrawComponents(selected);
+		for (auto& go : g.children)
+		{
+			DrawEntityNode(go);
+		}
 		ImGui::End();
+	}
+	if (affichage.component) {
+		if (selected)
+		{
+			ImGui::Begin("component");
+			DrawComponents(selected);
+			ImGui::End();
+		}
 	}
 }
 

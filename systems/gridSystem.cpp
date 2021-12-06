@@ -37,7 +37,7 @@ namespace lve {
         assert(pipelineLayout != VK_NULL_HANDLE && "Cannot create pipeline before pipeline layout");
 
         PipelineConfigInfo configInfo{};
-        LvePipeline::defaultPipelineConfigInfo(configInfo, VK_POLYGON_MODE_LINE);
+        LvePipeline::defaultPipelineConfigInfo(configInfo, VK_POLYGON_MODE_FILL);
         configInfo.renderPass = renderPass;
         configInfo.pipelineLayout = pipelineLayout;
         configInfo.bindingDescriptions.clear();
@@ -50,7 +50,7 @@ namespace lve {
             m_Device,
             "shaders/grid.vert.spv",
             "shaders/grid.frag.spv",
-            configInfo);
+            configInfo, false);
     }
 
     void GridSystem::render(FrameInfo& frameInfo) {

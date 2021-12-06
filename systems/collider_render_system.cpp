@@ -67,7 +67,7 @@ namespace lve {
             lveDevice,
             "shaders/simple_shader.vert.spv",
             "shaders/simple_shader.frag.spv",
-            pipelineConfig);
+            pipelineConfig, true);
     }
 
     void ColliderRenderSystem::renderScene(FrameInfo& frameInfo, GameObject racine) {

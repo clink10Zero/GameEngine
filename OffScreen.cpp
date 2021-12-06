@@ -277,7 +277,7 @@ namespace lve {
         LvePipeline::defaultPipelineConfigInfo(pipelineConfig,VK_POLYGON_MODE_FILL);
         pipelineConfig.renderPass = pass.renderPass;
         pipelineConfig.pipelineLayout = pipelineLayout;
-        m_Pipeline = std::make_unique<LvePipeline>(m_Device, "shaders/simple_shader.vert.spv", "shaders/simple_shader.frag.spv", pipelineConfig);
+        m_Pipeline = std::make_unique<LvePipeline>(m_Device, "shaders/simple_shader.vert.spv", "shaders/simple_shader.frag.spv", pipelineConfig, true);
     }
 
 }

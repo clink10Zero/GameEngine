@@ -9,6 +9,7 @@
 
 #include "./ecs/coordinator.hpp"
 #include "sceneHierarchy.hpp"
+#include "menu.hpp"
 
 // std
 #include <memory>
@@ -44,6 +45,7 @@ namespace lve {
 
 		Coordinator gCoordinatorSaveEditor;
 
+		Menu menuBarre{};
 		SceneHierarchyPanel hierarchy{};
 	};
 }

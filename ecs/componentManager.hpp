@@ -9,6 +9,7 @@
 class ComponentManager
 {
 	public:
+
 		template<typename T>
 		void RegisterComponnent()
 		{

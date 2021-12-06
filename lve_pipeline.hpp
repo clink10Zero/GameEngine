@@ -35,7 +35,7 @@ namespace lve {
 			LveDevice& device,
 			const std::string& vertFilepath,
 			const std::string& fragFilepath,
-			const PipelineConfigInfo& configInfo);
+			const PipelineConfigInfo& configInfo, const bool& hasVertexAtrributes);
 			~LvePipeline();
 
 			LvePipeline(const LvePipeline&) = delete;
@@ -51,7 +51,7 @@ namespace lve {
 			void createGraphicsPipeline(
 			const std::string& vertFilepath,
 			const std::string& fragFilepath,
-			const PipelineConfigInfo& configInfo);
+			const PipelineConfigInfo& configInfo, const bool& hasVertexAtrributes);
 
 			void createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule);
 

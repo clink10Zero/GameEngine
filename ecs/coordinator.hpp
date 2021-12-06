@@ -4,12 +4,24 @@
 #include "./gameObjectManager.hpp"
 #include "./SystemManager.hpp"
 #include "./Types.hpp"
+#include "../lve_device.hpp"
 
 //for destroyed
 #include "../components/graph.hpp"
+#include "../components/aabb.hpp"
+#include "../components/Transform.hpp"
+#include "../components/mesh.hpp"
+#include "../components/RigidBody.hpp"
 
 #include <memory>
 #include <vector>
+
+#include <string>
+#include <iostream>
+#include <fstream>
+
+using namespace lve;
+using namespace std;
 
 class Coordinator
 {
@@ -19,6 +31,70 @@ class Coordinator
 			mComponentManager = std::make_unique<ComponentManager>();
 			mGameObjectManager = std::make_unique<GameObjectManager>();
 			mSystemManager = std::make_unique<SystemManager>();
+		}
+
+		void InitFromFile(std::string path, GameObject racine)
+		{
+			
+		}
+
+		void SaveToFile(std::string path, GameObject racine)
+		{
+			ofstream flux(path.c_str());
+
+			SaveGameObject(racine, flux);
+
+			Graph g = this->GetCompenent<Graph>(racine);
+			for (auto& go : g.children)
+			{
+				SaveGameObject(go, flux);
+			}
+			flux.close();
+		}
+
+		void SaveGameObject(GameObject go, ofstream &flux)
+		{
+			flux << "transform" << endl;
+			Transform t = this->GetCompenent<Transform>(go);
+			WriteVec(t.translation, flux);
+			WriteVec(t.rotation, flux);
+			WriteVec(t.scale, flux);
+
+			flux << "graph" << endl;
+			Graph g = this->GetCompenent<Graph>(go);
+			flux << g.parent << endl;
+			size_t sizeChildren = g.children.size();
+			for (size_t i = 0; i < sizeChildren; i++)
+			{
+				flux << g.children[i] << endl;
+			}
+
+			if (this->HaveComponent<Mesh>(go))
+			{
+				flux << "mesh" << endl;
+				Mesh m = this->GetCompenent<Mesh>(go);
+				flux << m.path << endl;
+				flux << m.lod << endl;
+			}
+
+			if (this->HaveComponent<AABB>(go))
+			{
+				flux << "aabb" << endl;
+			}
+
+			if (this->HaveComponent<RigidBody>(go))
+			{
+				flux << "rigidBody" << endl;
+				RigidBody r = this->GetCompenent<RigidBody>(go);
+				WriteVec(r.acceleration, flux);
+				WriteVec(r.velocity, flux);
+				WriteVec(r.forceGravity, flux);
+			}
+		}
+
+		static void WriteVec(glm::vec3 vec, ofstream& flux)
+		{
+			flux << vec.x << " " << vec.y << " " << vec.z << endl;
 		}
 
 		//GameObject methode

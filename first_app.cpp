@@ -26,7 +26,10 @@
 
 #include "ecs/coordinator.hpp"
 
+#include "projectSetting.hpp"
+
 #include "imguiLayer.hpp"
+#include "print.hpp"
 
 // std
 #include <array>
@@ -34,10 +37,18 @@
 #include <cassert>
 #include <chrono>
 
+using namespace printGUI;
+
+using namespace setting;
 
 Coordinator gCoordinator;
-
 std::shared_ptr<PhysiqueSystem> physicsSystem;
+
+//permet de savoir si on doit afficher ou non une window
+Print affichage{};
+
+//paramettre général du moteur de jeux
+ProjectSetting pSetting{};
 
 namespace lve {
 
@@ -90,7 +101,6 @@ namespace lve {
         OffScreen screen(lveDevice, globalSetLayout->getDescriptorSetLayout());
 
         SimpleRenderSystem simpleRenderSystem{ lveDevice, screen.GetRenderPass(), globalSetLayout->getDescriptorSetLayout() };
-
         //GridSystem gridsystem{ lveDevice,screen.GetRenderPass(), globalSetLayout->getDescriptorSetLayout() };
         ColliderRenderSystem colliderRenderSystem{ lveDevice, screen.GetRenderPass(), globalSetLayout->getDescriptorSetLayout() };
 
@@ -103,6 +113,8 @@ namespace lve {
         Imgui m_Imgui{ lveWindow, lveDevice, lveRenderer.getSwapChainRenderPass(), lveRenderer.getImageCount()};
 
         auto currentTime = std::chrono::high_resolution_clock::now();
+
+        static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
         while (!lveWindow.shouldClose()) {
             glfwPollEvents();
@@ -141,37 +153,61 @@ namespace lve {
                 m_Imgui.newFrame();
                 lveRenderer.beginSwapChainRenderPass(commandBuffer);
                 
-                //fenêtre principal
-                ImGui::Begin("Game");
-                float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-                auto size = ImGui::GetWindowSize();
-                size.y -= lineHeight - 2.0f;
-                
-                if (ImGui::Button(playLabel.c_str(), ImVec2{ lineHeight - (size.x / 2.0f), lineHeight }))
-                {
-                    if (editor)
-                    {
-                        editor = false;
-                        playLabel = "Pause";
-                        //TODO copy coordinator
-                        gCoordinatorSaveEditor = gCoordinator;
-                    }
-                    else
-                    {
-                        editor = true;
-                        playLabel = "Play";
-                        //TODO copy coordinator
-                        gCoordinator = gCoordinator;
-                    }
-                }
+                bool open = true;
+                ImGui::Begin("dockSpace", &open, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove);
 
-                ImGui::Separator();
-                ImGui::Image((ImTextureID) ImGui_ImplVulkan_AddTexture(screen.GetSampler(), screen.GetImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL), { size.x, (size.y - 36.0f) });
+                ImGuiIO& io = ImGui::GetIO();
+                if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
+                    ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+                    ImGui::DockSpace(dockspace_id, ImVec2(0.f , 0.f), dockspace_flags);
+                }
                 ImGui::End();
-                
+
+                menuBarre.OnImGuiRender();
+
+                //fenêtre principal
+                if (affichage.game)
+                {
+                    ImGui::Begin("Game");
+                    float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+                    auto size = ImGui::GetWindowSize();
+                    size.y -= lineHeight - 2.0f;
+
+                    if (ImGui::Button(playLabel.c_str(), ImVec2{ lineHeight - (size.x / 2.0f), lineHeight }))
+                    {
+                        if (editor)
+                        {
+                            editor = false;
+                            playLabel = "Pause";
+                            //TODO copy coordinator
+                            gCoordinatorSaveEditor = gCoordinator;
+                        }
+                        else
+                        {
+                            editor = true;
+                            playLabel = "Play";
+                            //TODO copy coordinator
+                            gCoordinator = gCoordinator;
+                        }
+                    }
+
+                    ImGui::Separator();
+                    ImGui::Image((ImTextureID)ImGui_ImplVulkan_AddTexture(screen.GetSampler(), screen.GetImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL), { size.x, (size.y - 36.0f) });
+                    ImGui::End();
+                }
+                //fin fenêtre principal
+
                 hierarchy.OnImGuiRender(racine);
 
+                io.DisplaySize = ImVec2((float)1280, (float)720);
+
                 m_Imgui.render(commandBuffer);
+                
+                if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+                {
+                    ImGui::UpdatePlatformWindows();
+                    ImGui::RenderPlatformWindowsDefault();
+                }
 
                 lveRenderer.endSwapChainRenderPass(commandBuffer);
                 lveRenderer.endFrame();
@@ -232,7 +268,6 @@ namespace lve {
         gCoordinator.AddComponent<Mesh>(wolf, m_wolf);
 
         Transform t_wolf{};
-
         t_wolf.translation = glm::vec3(0.f, 0.f, 0.f);
         t_wolf.rotation = glm::vec3(0.f, 0.f, 0.f);
         t_wolf.scale = glm::vec3(1.f, 1.f, 1.f);
@@ -250,6 +285,7 @@ namespace lve {
         Graph g_wolf{};
 
         GameObject floor = gCoordinator.CreateGameObject();
+
         Mesh m_floor{};
         m_floor.path = "models/colored_cube.obj";
         m_floor.lod = 0;
