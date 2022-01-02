@@ -89,7 +89,7 @@ namespace lve {
      */
     void LveBuffer::writeToBuffer(void* data, VkDeviceSize size, VkDeviceSize offset) {
         assert(mapped && "Cannot copy to unmapped buffer");
-
+        
         if (size == VK_WHOLE_SIZE) {
             memcpy(mapped, data, bufferSize);
         }

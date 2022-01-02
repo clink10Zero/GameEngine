@@ -31,7 +31,7 @@ namespace lve {
 
 	private:
 		void loadGameObject();
-		void loadCoordinateur();
+		void loadCoordinateur(GLFWwindow* window);
 		GameObject racine;
 
 		LveWindow lveWindow{WIDTH, HEIGHT, "PouleEngine 0.2v (Toujours pas Minecraft! XOXO)"};

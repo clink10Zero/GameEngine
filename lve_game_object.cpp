@@ -2,7 +2,7 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 namespace lve {
-	glm::mat4 lve::TransformComponent::mat4() {
+	/*glm::mat4 lve::TransformComponent::mat4() {
 		const float c3 = glm::cos(rotation.z);
 		const float s3 = glm::sin(rotation.z);
 		const float c2 = glm::cos(rotation.x);
@@ -139,5 +139,5 @@ namespace lve {
 
 
 		return result;
-	}
+	}*/
 }

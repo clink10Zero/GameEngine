@@ -4,129 +4,161 @@
 #include "../components/Transform.hpp"
 #include "../components/RigidBody.hpp"
 #include "../components/mesh.hpp"
-
+#include "../components/MotionControl.hpp"
 
 #include <iostream>
 
-
 extern Coordinator gCoordinator;
 
-void PhysiqueSystem::Init()
-{
-
+void PhysiqueSystem::Init(GLFWwindow* glfw_window) {
+	 window = glfw_window;
+	 for (auto const& go : mGameObject) {
+		 calculeAABB(go);
+	 }
 }
 
-void PhysiqueSystem::Update(float dt)
-{
+void PhysiqueSystem::Update(float dt){
 
-	for (auto const& go : mGameObject)
-	{
-		TestCollision(dt, go);
+	for (auto const& go : mGameObject){
+		moveInPlanXZ(dt, go);
+		testCollision(dt, go);
 	}
 }
 
-void PhysiqueSystem::MakeMove(float dt, GameObject  go)
-{
-	if (gCoordinator.HaveComponent<RigidBody>(go))
-	{
-		auto& rb = gCoordinator.GetCompenent<RigidBody>(go);
-		auto& transform = gCoordinator.GetCompenent<Transform>(go);
-
-
+void PhysiqueSystem::makeMove(float dt, GameObject  go){
+	Transform& transform = gCoordinator.GetCompenent<Transform>(go);
+	if (gCoordinator.HaveComponent<RigidBody>(go)){
+		RigidBody& rb = gCoordinator.GetCompenent<RigidBody>(go);
+		
 		transform.translation += rb.velocity * dt;
 		rb.velocity += rb.forceGravity * dt;
 	}
+	if (gCoordinator.HaveComponent<MotionControl>(go)) {
+		MotionControl& mc = gCoordinator.GetCompenent<MotionControl>(go);
+		transform.translation += mc.movement;
+	}
+
 }
 
-void PhysiqueSystem::TestCollision(float dt, GameObject go)
-{
-	//calculeAABB(go);
-	//auto& aabb = gCoordinator.GetCompenent<AABB>(go);
-	if (gCoordinator.HaveComponent<RigidBody>(go))
-	{
-		auto aabb = calculeAABBDeplacement(go, dt);
+void PhysiqueSystem::moveInPlanXZ(float dt, GameObject go) {
+	if (gCoordinator.HaveComponent<MotionControl>(go)){
+		Transform& transform = gCoordinator.GetCompenent<Transform>(go);
+		MotionControl& mc = gCoordinator.GetCompenent<MotionControl>(go);
+
+		mc.movement = { 0.f, 0.f, 0.f };
+		glm::vec3 rotate{ .0f };
+		if (glfwGetKey(window, mc.keys.lookRight) == GLFW_PRESS) rotate.y += 1.f;
+		if (glfwGetKey(window, mc.keys.lookLeft) == GLFW_PRESS) rotate.y -= 1.f;
+		if (glfwGetKey(window, mc.keys.lookUp) == GLFW_PRESS) rotate.x += 1.f;
+		if (glfwGetKey(window, mc.keys.lookDown) == GLFW_PRESS) rotate.x -= 1.f;
+
+		if (glm::dot(rotate, rotate) > std::numeric_limits<float>::epsilon()) {
+			transform.rotation += mc.lookSpeed * dt * glm::normalize(rotate);
+		}
+
+		transform.rotation.x = glm::clamp(transform.rotation.x, -1.5f, 1.5f);
+		transform.rotation.y = glm::mod(transform.rotation.y, glm::two_pi<float>());
+
+		float yaw = transform.rotation.y;
+		const glm::vec3 forwardDir{ sin(yaw), .0f, cos(yaw) };
+		const glm::vec3 rightDir{ forwardDir.z, .0f, -forwardDir.x };
+		const glm::vec3 upDir{ .0f, -1.f, .0f };
+
+		glm::vec3 moveDir{ .0f };
+		if (glfwGetKey(window, mc.keys.moveForward) == GLFW_PRESS) moveDir += forwardDir;
+		if (glfwGetKey(window, mc.keys.moveBackward) == GLFW_PRESS) moveDir -= forwardDir;
+		if (glfwGetKey(window, mc.keys.moveRight) == GLFW_PRESS) moveDir += rightDir;
+		if (glfwGetKey(window, mc.keys.moveLeft) == GLFW_PRESS) moveDir -= rightDir;
+		if (glfwGetKey(window, mc.keys.moveUp) == GLFW_PRESS) moveDir += upDir;
+		//if (glfwGetKey(window, mc.keys.moveDown) == GLFW_PRESS) moveDir -= upDir;
+
+		if (glm::dot(moveDir, moveDir) > std::numeric_limits<float>::epsilon()) {
+			mc.movement = mc.moveSpeed * dt * glm::normalize(moveDir);
+		}
+	}
+}
+
+void PhysiqueSystem::testCollision(float dt, GameObject go){
+
+	if (gCoordinator.HaveComponent<RigidBody>(go)){
+		AABB aabbDeplacement = calculeAABBDeplacement(go, dt);
 
 		bool move = true;
-		for (auto const& go2 : mGameObject)
-		{
-			if (go2 != go)
-			{
-				//calculeAABB(go2);
-				//auto& aabb2 = gCoordinator.GetCompenent<AABB>(go2);
-				auto aabb2 = calculeAABBDeplacement(go2, dt);
+		for (auto const& go2 : mGameObject){
+			if (go2 != go){
+				AABB aabbDepalcement2 = calculeAABBDeplacement(go2, dt);
 
-				if ((aabb.min.x <= aabb2.min.x && aabb.max.x >= aabb2.min.x ||
-					aabb.max.x >= aabb2.max.x && aabb.min.x <= aabb2.max.x ||
-					aabb.min.x >= aabb2.min.x && aabb.max.x <= aabb2.max.x) &&
-					(aabb.min.y <= aabb2.min.y && aabb.max.y >= aabb2.min.y ||
-						aabb.max.y >= aabb2.max.y && aabb.min.y <= aabb2.max.y ||
-						aabb.min.y >= aabb2.min.y && aabb.max.y <= aabb2.max.y) &&
-					(aabb.min.z <= aabb2.min.z && aabb.max.z >= aabb2.min.z ||
-						aabb.max.z >= aabb2.max.z && aabb.min.z <= aabb2.max.z ||
-						aabb.min.z >= aabb2.min.z && aabb.max.z <= aabb2.max.z)
+				if ((aabbDeplacement.min.x <= aabbDepalcement2.min.x && aabbDeplacement.max.x >= aabbDepalcement2.min.x ||
+					aabbDeplacement.max.x >= aabbDepalcement2.max.x && aabbDeplacement.min.x <= aabbDepalcement2.max.x ||
+					aabbDeplacement.min.x >= aabbDepalcement2.min.x && aabbDeplacement.max.x <= aabbDepalcement2.max.x) &&
+					(aabbDeplacement.min.y <= aabbDepalcement2.min.y && aabbDeplacement.max.y >= aabbDepalcement2.min.y ||
+						aabbDeplacement.max.y >= aabbDepalcement2.max.y && aabbDeplacement.min.y <= aabbDepalcement2.max.y ||
+						aabbDeplacement.min.y >= aabbDepalcement2.min.y && aabbDeplacement.max.y <= aabbDepalcement2.max.y) &&
+					(aabbDeplacement.min.z <= aabbDepalcement2.min.z && aabbDeplacement.max.z >= aabbDepalcement2.min.z ||
+						aabbDeplacement.max.z >= aabbDepalcement2.max.z && aabbDeplacement.min.z <= aabbDepalcement2.max.z ||
+						aabbDeplacement.min.z >= aabbDepalcement2.min.z && aabbDeplacement.max.z <= aabbDepalcement2.max.z)
 					) {
 					//TODO gérer la collision
-					move = false;
-					//TODO resset gravity
+
+					AABB& aabb = gCoordinator.GetCompenent<AABB>(go);
+					AABB& aabb2 = gCoordinator.GetCompenent<AABB>(go2);
+
+					Transform& t = gCoordinator.GetCompenent<Transform>(go);
+					t.translation.y += -aabb.max.y + aabb2.min.y;
+					RigidBody& rb = gCoordinator.GetCompenent<RigidBody>(go);
+					rb.velocity = { 0,0,0 };
 				}
 			}
 		}
-		if (move) {
-			MakeMove(dt, go);
-		}
+
+		makeMove(dt, go);
+
 	}
 }
+void PhysiqueSystem::calculeAABB(GameObject go){
 
-void PhysiqueSystem::calculeAABB(GameObject go)
-{
-	auto& aabb = gCoordinator.GetCompenent<AABB>(go);
 	auto& mesh = gCoordinator.GetCompenent<Mesh>(go);
+	auto& aabb = gCoordinator.GetCompenent<AABB>(go);
 	auto& transform = gCoordinator.GetCompenent<Transform>(go);
+	//TODO getWorldTransform
 
-	glm::vec3 max = mesh.data->getPostionVertex(0);
-	glm::vec3 min = mesh.data->getPostionVertex(0);
+	glm::vec3 currentMax = transform.mat4() * glm::vec4(mesh.data->getPostionVertex(0), 1.f);
+	glm::vec3 currentMin = transform.mat4() * glm::vec4(mesh.data->getPostionVertex(0), 1.f);
 
-	for (int i = 1; i < mesh.data->getVertexSize(); i++)
-	{
-		glm::vec3 tmp = mesh.data->getPostionVertex(i);
+	for (int i = 1; i < mesh.data->getVertexSize(); i++){
+		glm::vec3 tmp = transform.mat4() * glm::vec4(mesh.data->getPostionVertex(i), 1.f);
 
-		if (max.x < tmp.x)
-			max.x = tmp.x;
-		if (max.y < tmp.y)
-			max.y = tmp.y;
-		if (max.z < tmp.z)
-			max.z = tmp.z;
+		if (currentMax.x < tmp.x)
+			currentMax.x = tmp.x;
+		if (currentMax.y < tmp.y)
+			currentMax.y = tmp.y;
+		if (currentMax.z < tmp.z)
+			currentMax.z = tmp.z;
 
-		if (min.x > tmp.x)
-			min.x = tmp.x;
-		if (min.y > tmp.y)
-			min.y = tmp.y;
-		if (min.z > tmp.z)
-			min.z = tmp.z;
+		if (currentMin.x > tmp.x)
+			currentMin.x = tmp.x;
+		if (currentMin.y > tmp.y)
+			currentMin.y = tmp.y;
+		if (currentMin.z > tmp.z)
+			currentMin.z = tmp.z;
 	}
 
-	aabb.max = max * transform.scale + transform.translation;
-	aabb.min = min * transform.scale + transform.translation;
-
+	aabb.max = currentMax;
+	aabb.min = currentMin;
 }
 
-AABB PhysiqueSystem::calculeAABBDeplacement(GameObject go, float dt)
-{
+AABB PhysiqueSystem::calculeAABBDeplacement(GameObject go, float dt){
 	calculeAABB(go);
-	auto& aabb = gCoordinator.GetCompenent<AABB>(go);
+	AABB& aabb = gCoordinator.GetCompenent<AABB>(go);
 
-	if (gCoordinator.HaveComponent<RigidBody>(go))
-	{
-		auto& rb = gCoordinator.GetCompenent<RigidBody>(go);
-		Transform afterMove{};
-		afterMove.translation += rb.velocity * dt;
+	if (gCoordinator.HaveComponent<RigidBody>(go)){
+		RigidBody& rb = gCoordinator.GetCompenent<RigidBody>(go);
+		Transform move{};
+		move.translation = rb.velocity * dt;
 
 		AABB aabbAfterMove{};
-		aabbAfterMove.max = aabb.max + afterMove.translation;
-		aabbAfterMove.min = aabb.min + afterMove.translation;
-
-		auto& mesh = gCoordinator.GetCompenent<Mesh>(go);
-		auto& transform = gCoordinator.GetCompenent<Transform>(go);
+		aabbAfterMove.max = aabb.max + move.translation;
+		aabbAfterMove.min = aabb.min + move.translation;
 
 		glm::vec3 max = aabb.max;
 		glm::vec3 min = aabb.min;
@@ -146,8 +178,9 @@ AABB PhysiqueSystem::calculeAABBDeplacement(GameObject go, float dt)
 			min.z = aabbAfterMove.min.z;
 
 		return AABB{ max , min };
-
 	}
 
 	return aabb;
 }
+
+
