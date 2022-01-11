@@ -23,7 +23,6 @@
 #include "systems/graphSystem.hpp"
 #include "systems/physicsSystem.hpp"
 #include "systems/gridSystem.hpp"
-#include "systems/collider_render_system.hpp"
 #include "systems/terrainSystem.hpp"
 
 #include "systems/viewSystem.hpp"
@@ -186,14 +185,14 @@ namespace lve {
                             editor = false;
                             playLabel = "Pause";
                             //TODO copy coordinator
-                            gCoordinatorSaveEditor = gCoordinator;
+                            //gCoordinatorSaveEditor = gCoordinator;
                         }
                         else
                         {
                             editor = true;
                             playLabel = "Play";
                             //TODO copy coordinator
-                            gCoordinator = gCoordinator;
+                            //gCoordinator = gCoordinator;
                         }
                     }
                     ImGui::End();
@@ -248,6 +247,7 @@ namespace lve {
             Signature signature;
             signature.set(gCoordinator.GetComponentType<Transform>());
             signature.set(gCoordinator.GetComponentType<Mesh>());
+            signature.set(gCoordinator.GetComponentType<AABB>());
 
             gCoordinator.SetSystemSignature<PhysiqueSystem>(signature);
         }
@@ -292,6 +292,7 @@ namespace lve {
         gCoordinator.AddComponent<Transform>(racine, t_racine);
 
         //Wolf
+        /*
         GameObject wolf = gCoordinator.CreateGameObject();
         Mesh m_wolf;
         m_wolf.path = "models/Wolf_obj.obj";
@@ -314,17 +315,7 @@ namespace lve {
         gCoordinator.AddComponent<AABB>(wolf, AABB{});
 
         Graph g_wolf{};
-
-
-        //Floor
-        GameObject floor = gCoordinator.CreateGameObject();
-
-        Mesh m_floor{};
-        m_floor.path = "models/colored_cube.obj";
-        m_floor.lod = 0;
-        m_floor.data = LveModel::createModelFromFile(lveDevice, m_floor.path, m_floor.lod);
-
-
+        */
         //Floor
         GameObject floor = gCoordinator.CreateGameObject();
 
@@ -339,6 +330,7 @@ namespace lve {
         Graph g_floor{};
         
         //Big wall
+        /*
         GameObject wall = gCoordinator.CreateGameObject();
 
         Mesh m_wall{};
@@ -358,7 +350,7 @@ namespace lve {
         gCoordinator.AddComponent<AABB>(wall, AABB{});
 
         Graph g_wall{};
-
+        */
 
         //Player
         GameObject player = gCoordinator.CreateGameObject();
@@ -414,26 +406,22 @@ namespace lve {
         //Graph
         g_player.children.push_back(cam);
 
-        g_racine.children.push_back(wolf);
+        //g_racine.children.push_back(wolf);
         g_racine.children.push_back(floor);
-        g_racine.children.push_back(wall);
-        g_racine.children.push_back(player);
-        g_racine.children.push_back(camg);
-
-        g_racine.children.push_back(wall);
+        //g_racine.children.push_back(wall);
         g_racine.children.push_back(player);
         g_racine.children.push_back(camg);
 
         gCoordinator.AddComponent<Graph>(racine, g_racine);
 
-        g_wolf.parent = racine;
-        gCoordinator.AddComponent<Graph>(wolf, g_wolf);
+        //g_wolf.parent = racine;
+        //gCoordinator.AddComponent<Graph>(wolf, g_wolf);
 
         g_floor.parent = racine;
         gCoordinator.AddComponent<Graph>(floor, g_floor);
         
-        g_wall.parent = racine;
-        gCoordinator.AddComponent<Graph>(wall, g_wall);
+        //g_wall.parent = racine;
+        //gCoordinator.AddComponent<Graph>(wall, g_wall);
 
         g_player.parent = racine;
         gCoordinator.AddComponent<Graph>(player, g_player);

@@ -37,6 +37,12 @@
     <Filter Include="Fichiers d%27en-tête\imguiCustom">
       <UniqueIdentifier>{ce5e6216-9702-49bd-8828-3d3578f2b61a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\render">
+      <UniqueIdentifier>{ca4666f4-59e4-472e-b2cc-dd98a697788f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\render">
+      <UniqueIdentifier>{cce5310e-6d78-43f1-9018-d99b8207e4af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="first_app.cpp">
@@ -84,9 +90,6 @@
     <ClCompile Include="systems\physicsSystem.cpp">
       <Filter>Fichiers sources\systems</Filter>
     </ClCompile>
-    <ClCompile Include="systems\simple_render_system.cpp">
-      <Filter>Fichiers sources\systems</Filter>
-    </ClCompile>
     <ClCompile Include="imguiLayer.cpp">
       <Filter>Fichiers sources\imguiCustom</Filter>
     </ClCompile>
@@ -117,9 +120,6 @@
     <ClCompile Include="systems\gridSystem.cpp">
       <Filter>Fichiers sources\systems</Filter>
     </ClCompile>
-    <ClCompile Include="systems\collider_render_system.cpp">
-      <Filter>Fichiers sources\systems</Filter>
-    </ClCompile>
     <ClCompile Include="menu.cpp">
       <Filter>Fichiers sources\imguiCustom</Filter>
     </ClCompile>
@@ -127,6 +127,18 @@
       <Filter>Fichiers sources\imguiCustom</Filter>
     </ClCompile>
     <ClCompile Include="systems\terrainSystem.cpp">
+      <Filter>Fichiers sources\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="render_system\point_light_render_system.cpp">
+      <Filter>Fichiers sources\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render_system\simple_render_system.cpp">
+      <Filter>Fichiers sources\render</Filter>
+    </ClCompile>
+    <ClCompile Include="render_system\collider_render_system.cpp">
+      <Filter>Fichiers sources\render</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\viewSystem.cpp">
       <Filter>Fichiers sources\systems</Filter>
     </ClCompile>
   </ItemGroup>
@@ -209,9 +221,6 @@
     <ClInclude Include="systems\system.hpp">
       <Filter>Fichiers d%27en-tête\systems</Filter>
     </ClInclude>
-    <ClInclude Include="systems\simple_render_system.hpp">
-      <Filter>Fichiers d%27en-tête\systems</Filter>
-    </ClInclude>
     <ClInclude Include="systems\physicsSystem.hpp">
       <Filter>Fichiers d%27en-tête\systems</Filter>
     </ClInclude>
@@ -254,9 +263,6 @@
     <ClInclude Include="systems\gridSystem.hpp">
       <Filter>Fichiers d%27en-tête\systems</Filter>
     </ClInclude>
-    <ClInclude Include="systems\collider_render_system.hpp">
-      <Filter>Fichiers d%27en-tête\systems</Filter>
-    </ClInclude>
     <ClInclude Include="menu.hpp">
       <Filter>Fichiers d%27en-tête\imguiCustom</Filter>
     </ClInclude>
@@ -273,6 +279,21 @@
       <Filter>Fichiers d%27en-tête\systems</Filter>
     </ClInclude>
     <ClInclude Include="components\terrain.hpp">
+      <Filter>Fichiers d%27en-tête\component</Filter>
+    </ClInclude>
+    <ClInclude Include="render_system\point_light_render_system.hpp">
+      <Filter>Fichiers d%27en-tête\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render_system\simple_render_system.hpp">
+      <Filter>Fichiers d%27en-tête\render</Filter>
+    </ClInclude>
+    <ClInclude Include="render_system\collider_render_system.hpp">
+      <Filter>Fichiers d%27en-tête\render</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\viewSystem.hpp">
+      <Filter>Fichiers d%27en-tête\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="components\Camera.hpp">
       <Filter>Fichiers d%27en-tête\component</Filter>
     </ClInclude>
   </ItemGroup>

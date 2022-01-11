@@ -42,16 +42,19 @@
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="OffScreen.cpp" />
     <ClCompile Include="projectSettingGUI.cpp" />
+    <ClCompile Include="render_system\collider_render_system.cpp" />
+    <ClCompile Include="render_system\point_light_render_system.cpp" />
+    <ClCompile Include="render_system\simple_render_system.cpp" />
     <ClCompile Include="sceneHierarchy.cpp" />
-    <ClCompile Include="systems\collider_render_system.cpp" />
     <ClCompile Include="systems\graphSystem.cpp" />
     <ClCompile Include="systems\gridSystem.cpp" />
     <ClCompile Include="systems\physicsSystem.cpp" />
-    <ClCompile Include="systems\simple_render_system.cpp" />
     <ClCompile Include="systems\terrainSystem.cpp" />
+    <ClCompile Include="systems\viewSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\aabb.hpp" />
+    <ClInclude Include="components\Camera.hpp" />
     <ClInclude Include="components\graph.hpp" />
     <ClInclude Include="components\mesh.hpp" />
     <ClInclude Include="components\RigidBody.hpp" />
@@ -91,14 +94,16 @@
     <ClInclude Include="print.hpp" />
     <ClInclude Include="projectSetting.hpp" />
     <ClInclude Include="projectSettingGUI.hpp" />
+    <ClInclude Include="render_system\collider_render_system.hpp" />
+    <ClInclude Include="render_system\point_light_render_system.hpp" />
+    <ClInclude Include="render_system\simple_render_system.hpp" />
     <ClInclude Include="sceneHierarchy.hpp" />
-    <ClInclude Include="systems\collider_render_system.hpp" />
     <ClInclude Include="systems\graphSystem.hpp" />
     <ClInclude Include="systems\gridSystem.hpp" />
     <ClInclude Include="systems\physicsSystem.hpp" />
-    <ClInclude Include="systems\simple_render_system.hpp" />
     <ClInclude Include="systems\system.hpp" />
     <ClInclude Include="systems\terrainSystem.hpp" />
+    <ClInclude Include="systems\viewSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\grid.frag" />
