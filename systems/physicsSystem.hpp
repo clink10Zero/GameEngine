@@ -10,8 +10,6 @@ class PhysiqueSystem : public System
 		void Init(GLFWwindow* glfw_window);
 
 		void Update(float dt);
-
-		void makeMove(float dt, GameObject go);
 		void moveInPlanXZ(float dt, GameObject go);
 		void testCollision(float dt, GameObject go);
 		void calculeAABB(GameObject go);

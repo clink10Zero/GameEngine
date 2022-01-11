@@ -10,7 +10,7 @@ extern Coordinator gCoordinator;
 class ViewSystem : public System
 {
 	public:
-		void Init(float aspectRatio);
+		void Init(float aspectRatio, GLFWwindow* glfw_window);
 		void Update(float aspectRatio);
 
 		const glm::mat4& getProjection() const {
@@ -22,6 +22,9 @@ class ViewSystem : public System
 		}
 		
 		void setUpCamera(float aspectRatio);
+
+		void nextCam();
 	private :
 		GameObject currentCam;
+		GLFWwindow* window;
 };

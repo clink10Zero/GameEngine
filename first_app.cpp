@@ -72,7 +72,7 @@ namespace lve {
             .build();
         loadCoordinateur(lveWindow.getGLFWwindow());
         loadGameObject();
-        viewSystem->Init(lveRenderer.getAspectRatio());
+        viewSystem->Init(lveRenderer.getAspectRatio(), lveWindow.getGLFWwindow());
     }
 
     FirstApp::~FirstApp() { }
@@ -127,8 +127,8 @@ namespace lve {
             if (!editor)
             {
                 physicsSystem->Update(frameTime);
-                viewSystem->Update(lveRenderer.getAspectRatio());
             }
+            viewSystem->Update(lveRenderer.getAspectRatio());
 
             if (auto commandBuffer = lveRenderer.beginFrame()) {
                 int frameIndex = lveRenderer.getFrameIndex();
@@ -285,6 +285,7 @@ namespace lve {
 
         RigidBody rb_wolf{};
         rb_wolf.forceGravity = glm::vec3{ 0.f, 9.f, 0.f };
+        //rb_wolf.velocity = rb_wolf.forceGravity;
         gCoordinator.AddComponent<RigidBody>(wolf, rb_wolf);
 
         gCoordinator.AddComponent<AABB>(wolf, AABB{});
@@ -351,6 +352,7 @@ namespace lve {
 
         RigidBody rb_player{};
         rb_player.forceGravity = glm::vec3{ 0.f, 9.f, 0.f };
+        //rb_player.velocity = rb_player.forceGravity;
         gCoordinator.AddComponent<RigidBody>(player, rb_player);
 
         gCoordinator.AddComponent<AABB>(player, AABB{});
@@ -372,6 +374,18 @@ namespace lve {
 
         Graph g_cam{};
 
+        //CameraGlobale
+        GameObject camg = gCoordinator.CreateGameObject();
+
+        Transform t_camg{};
+        t_camg.translation = glm::vec3(0.f, -1.f, -7.f);
+        gCoordinator.AddComponent<Transform>(camg, t_camg);
+
+        Camera cam_camg{};
+        gCoordinator.AddComponent<Camera>(camg, cam_camg);
+
+        Graph g_camg{};
+
 
         //Graph
         g_player.children.push_back(cam);
@@ -380,6 +394,7 @@ namespace lve {
         g_racine.children.push_back(floor);
         g_racine.children.push_back(wall);
         g_racine.children.push_back(player);
+        g_racine.children.push_back(camg);
 
         gCoordinator.AddComponent<Graph>(racine, g_racine);
 
@@ -395,6 +410,9 @@ namespace lve {
         g_player.parent = racine;
         gCoordinator.AddComponent<Graph>(player, g_player);
 
+        g_camg.parent = racine;
+        gCoordinator.AddComponent<Graph>(camg, g_camg);
+        
         g_cam.parent = player;
         gCoordinator.AddComponent<Graph>(cam, g_cam);
     }
