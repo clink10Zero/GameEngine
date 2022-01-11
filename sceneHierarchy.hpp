@@ -8,6 +8,7 @@
 #include "components/RigidBody.hpp"
 #include "components/mesh.hpp"
 #include "components/aabb.hpp"
+#include "components/terrain.hpp"
 
 namespace lve {
     class SceneHierarchyPanel {

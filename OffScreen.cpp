@@ -113,7 +113,7 @@ namespace lve {
         depthStencilView.format = fbDepthFormat;
         depthStencilView.flags = 0;
         depthStencilView.subresourceRange = {};
-        depthStencilView.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+        depthStencilView.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
         depthStencilView.subresourceRange.baseMipLevel = 0;
         depthStencilView.subresourceRange.levelCount = 1;
         depthStencilView.subresourceRange.baseArrayLayer = 0;
@@ -274,7 +274,7 @@ namespace lve {
         assert(pipelineLayout != nullptr && "Cannot create pipeline before pipeline layout");
 
         PipelineConfigInfo pipelineConfig{};
-        LvePipeline::defaultPipelineConfigInfo(pipelineConfig,VK_POLYGON_MODE_FILL);
+        LvePipeline::defaultPipelineConfigInfo(pipelineConfig);
         pipelineConfig.renderPass = pass.renderPass;
         pipelineConfig.pipelineLayout = pipelineLayout;
         m_Pipeline = std::make_unique<LvePipeline>(m_Device, "shaders/simple_shader.vert.spv", "shaders/simple_shader.frag.spv", pipelineConfig, true);

@@ -68,8 +68,8 @@ namespace lve {
 		shaderStages[1].pSpecializationInfo = nullptr;
 
 		if (hasVertexAtrributes) {
-			auto bindingDescriptions = LveModel::Vertex::getBindingDescriptions();
-			auto attributeDescriptions = LveModel::Vertex::getAttributeDescriptions();
+			auto& bindingDescriptions = configInfo.bindingDescriptions;
+			auto& attributeDescriptions = configInfo.attributeDescriptions;
 			VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 			vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 			vertexInputInfo.vertexAttributeDescriptionCount =
@@ -166,7 +166,7 @@ namespace lve {
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
 	}
 
-	void LvePipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo, VkPolygonMode mode) {
+	void LvePipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo) {
 		configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 		configInfo.inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 		configInfo.inputAssemblyInfo.primitiveRestartEnable = VK_FALSE;
@@ -180,7 +180,7 @@ namespace lve {
 		configInfo.rasterizationInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
 		configInfo.rasterizationInfo.depthClampEnable = VK_FALSE;
 		configInfo.rasterizationInfo.rasterizerDiscardEnable = VK_FALSE;
-		configInfo.rasterizationInfo.polygonMode = mode;
+		configInfo.rasterizationInfo.polygonMode = VK_POLYGON_MODE_FILL;
 		configInfo.rasterizationInfo.lineWidth = 1.0f;
 		configInfo.rasterizationInfo.cullMode = VK_CULL_MODE_NONE;
 		configInfo.rasterizationInfo.frontFace = VK_FRONT_FACE_CLOCKWISE;
@@ -234,5 +234,8 @@ namespace lve {
 		configInfo.dynamicStateInfo.pDynamicStates = configInfo.dynamicStateEnables.data();
 		configInfo.dynamicStateInfo.dynamicStateCount = static_cast<uint32_t>(configInfo.dynamicStateEnables.size());
 		configInfo.dynamicStateInfo.flags = 0;
+
+		configInfo.bindingDescriptions = LveModel::Vertex::getBindingDescriptions();
+		configInfo.attributeDescriptions = LveModel::Vertex::getAttributeDescriptions();
 	}
 }  // namespace lve

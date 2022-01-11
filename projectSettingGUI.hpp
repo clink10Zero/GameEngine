@@ -13,7 +13,5 @@ namespace lve {
 		void SettingEditorControle();
 
 		void SettingGameControle();
-
-		void Keys();
 	};
 }

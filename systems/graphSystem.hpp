@@ -5,13 +5,8 @@
 
 class GraphSystem : public System
 {
-public:
+	public:
+		Transform getWorldPosition(GameObject go);
 
-	static glm::mat4 mat4(Transform self);
-	static glm::mat3 normalMatrix(Transform self);
-	static glm::mat3 normalWorldMatrix(Transform worldPlace);
-
-	static Transform combineWith(Transform self, Transform t);
-	static Transform interpolate_with(Transform self, Transform t, float time);
 
 };

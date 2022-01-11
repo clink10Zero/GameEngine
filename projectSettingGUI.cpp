@@ -19,32 +19,31 @@ namespace lve
 	void GUIProjectSetting::OnImGuiRender()
 	{
 		ImGui::Begin("Project setting");
-
 		ImGui::Columns(2);
-
-		if (ImGui::BeginMenu("Setting", true))
+		ImGui::SetColumnWidth(0, 200.f);
+		ImGui::SetColumnWidth(1, 300.f);
+		
+		if (ImGui::Button("Editor controle"))
 		{
-			if (ImGui::MenuItem("Editor controle", NULL, &affichage.settingEditorControle))
-			{
-				affichage.settingGameControle = false;
-			}
-			if (ImGui::MenuItem("Game controle", NULL, &affichage.settingGameControle))
-			{
-				affichage.settingEditorControle = false;
-			}
-			ImGui::End();
+			affichage.settingEditorControle = true;
+			affichage.settingGameControle = false;
+		}
+		if (ImGui::Button("Game controle"))
+		{
+			affichage.settingEditorControle = false;
+			affichage.settingGameControle = true;
 		}
 
 		ImGui::NextColumn();
-		
+
 		if (affichage.settingEditorControle)
 		{
-
+			SettingEditorControle();
 		}
-		else if (affichage.settingGameControle) {
-
+		else if (affichage.settingGameControle)
+		{
+			SettingGameControle();
 		}
-		ImGui::NewLine();
 		
 		if (ImGui::Button("valide"))
 		{
@@ -52,37 +51,65 @@ namespace lve
 			affichage.settingEditorControle = false;
 			affichage.settingGameControle = false;
 		}
+		
 		ImGui::SameLine();
+
 		if (ImGui::Button("cancel"))
 		{
 			affichage.projectSetting = false;
 			affichage.settingEditorControle = false;
 			affichage.settingGameControle = false;
 		}
-		
+
 		ImGui::End();
 	}
 
 	void GUIProjectSetting::SettingEditorControle()
 	{
 		ImGui::Text("Editor Controle");
-		ImGui::SameLine();
-		if (ImGui::SmallButton("+"))
-		{
-			std::vector<Key> keys = pSetting.getKeys();
-			char* stringKey[200];
 
-			for (int i = 0; i < keys.size(); i++)
-			{
-				//stringKey[i] = std::to_string(keys[0]).c_str();
-			}
-		}
-		ImGui::Separator();
 	}
 
 	void GUIProjectSetting::SettingGameControle()
 	{
+		ImGui::Text("Game Controle");
+		ImGui::SameLine();
+		static bool add = false;
+		if (ImGui::SmallButton("+"))
+		{
+			add = true;
+		}
+		if (add)
+		{
 
+			ImGui::Text("Name : ");
+			ImGui::SameLine();
+			char file[250] = "";
+			ImGui::InputText("", file, 250);
+			ImGui::SameLine();
+
+			if (ImGui::SmallButton("V"))
+			{
+				//pSetting.getGameControle().addElement(std::string(file), keys[selected]);
+				add = false;
+			}
+		}
+
+		ImGui::Separator();
+
+		std::map<std::string, Key> mapG = pSetting.getGameControle().getData();
+		std::map<std::string, Key>::iterator iter;
+
+		for (iter = mapG.begin(); iter != mapG.end(); iter++)
+		{
+			ImGui::Text((iter->first).c_str());
+			ImGui::SameLine();
+			ImGui::Text(std::to_string(iter->second).c_str());
+			ImGui::SameLine();
+			if (ImGui::SmallButton("X"))
+			{
+				pSetting.getGameControle().remove(iter->first);
+			}
+		}
 	}
-
 }

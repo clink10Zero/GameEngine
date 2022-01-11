@@ -126,6 +126,9 @@
     <ClCompile Include="projectSettingGUI.cpp">
       <Filter>Fichiers sources\imguiCustom</Filter>
     </ClCompile>
+    <ClCompile Include="systems\terrainSystem.cpp">
+      <Filter>Fichiers sources\systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="first_app.hpp">
@@ -265,6 +268,12 @@
     </ClInclude>
     <ClInclude Include="projectSettingGUI.hpp">
       <Filter>Fichiers d%27en-tête\imguiCustom</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\terrainSystem.hpp">
+      <Filter>Fichiers d%27en-tête\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="components\terrain.hpp">
+      <Filter>Fichiers d%27en-tête\component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

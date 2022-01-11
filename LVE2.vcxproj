@@ -48,12 +48,14 @@
     <ClCompile Include="systems\gridSystem.cpp" />
     <ClCompile Include="systems\physicsSystem.cpp" />
     <ClCompile Include="systems\simple_render_system.cpp" />
+    <ClCompile Include="systems\terrainSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\aabb.hpp" />
     <ClInclude Include="components\graph.hpp" />
     <ClInclude Include="components\mesh.hpp" />
     <ClInclude Include="components\RigidBody.hpp" />
+    <ClInclude Include="components\terrain.hpp" />
     <ClInclude Include="components\Transform.hpp" />
     <ClInclude Include="ecs\componentArray.hpp" />
     <ClInclude Include="ecs\componentManager.hpp" />
@@ -96,6 +98,7 @@
     <ClInclude Include="systems\physicsSystem.hpp" />
     <ClInclude Include="systems\simple_render_system.hpp" />
     <ClInclude Include="systems\system.hpp" />
+    <ClInclude Include="systems\terrainSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\grid.frag" />

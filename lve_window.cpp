@@ -22,6 +22,7 @@ namespace lve {
 		window = glfwCreateWindow(width, height, windowName.c_str(), nullptr, nullptr);
 		glfwSetWindowUserPointer(window, this);
 		glfwSetFramebufferSizeCallback(window, framebufferResizedCallback);
+
 	}
 
 	void LveWindow::createWindowSurface(VkInstance instance, VkSurfaceKHR *surface) {

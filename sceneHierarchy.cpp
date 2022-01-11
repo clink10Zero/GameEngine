@@ -54,16 +54,11 @@ void SceneHierarchyPanel::DrawEntityNode(GameObject go)
 	}
 
 	if (opened) {
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
-		bool opened = ImGui::TreeNodeEx((void*)9817239, flags, std::to_string(go).c_str());
-		if (opened) {
-			Graph g = gCoordinator.GetCompenent<Graph>(go);
+		Graph g = gCoordinator.GetCompenent<Graph>(go);
 
-			for (auto& cgo : g.children)
-			{
-				DrawEntityNode(cgo);
-			}
-			ImGui::TreePop();
+		for (auto& cgo : g.children)
+		{
+			DrawEntityNode(cgo);
 		}
 		ImGui::TreePop();
 	}
@@ -83,7 +78,7 @@ void SceneHierarchyPanel::DrawComponents(GameObject go)
 	ImGui::Text(("gameobject" + std::to_string(go)).c_str());
 	ImGui::SameLine();
 	ImGui::PushItemWidth(-1);
-	
+
 	if (ImGui::Button("Add Component"))
 		ImGui::OpenPopup("AddComponent");
 
@@ -95,44 +90,120 @@ void SceneHierarchyPanel::DrawComponents(GameObject go)
 	ImGui::PopItemWidth();
 
 	DrawComponent<Transform>("Transform", go, false, [](auto& component)
-	{
-		DrawVec3Control("Translation", component.translation, 0.0f, 100.f);
-		glm::vec3 rotation = glm::degrees(component.rotation);
-		DrawVec3Control("Rotation", rotation, 0.0f, 100.f);
-		component.rotation = glm::radians(rotation);
-		DrawVec3Control("Scale", component.scale, 1.0f, 100.f);
-	});
+		{
+			DrawVec3Control("Translation", component.translation, 0.0f, 100.f);
+			glm::vec3 rotation = glm::degrees(component.rotation);
+			DrawVec3Control("Rotation", rotation, 0.0f, 100.f);
+			component.rotation = glm::radians(rotation);
+			DrawVec3Control("Scale", component.scale, 1.0f, 100.f);
+		});
 
 	//TODO input pour modification direct
 	DrawComponent<Graph>("Graph", go, false, [](auto& component)
-	{
-		ImGui::Text(("Parent : " + std::to_string(component.parent)).c_str());
-		for (int i = 0; i < component.children.size(); i++)
 		{
-			ImGui::Text((std::to_string(i) + " - gameobject " + std::to_string(component.children[i])).c_str());
-		}
-	});
+			ImGui::Text(("Parent : " + std::to_string(component.parent)).c_str());
+			for (int i = 0; i < component.children.size(); i++)
+			{
+				ImGui::Text((std::to_string(i) + " - gameobject " + std::to_string(component.children[i])).c_str());
+			}
+		});
 
 	DrawComponent<AABB>("AABB", go, true, [](auto& component)
-	{
-		DrawVec3Control("Min", component.min, -100.f, 100.f);
-		DrawVec3Control("Max", component.max, -100.f, 100.f);
-	});
+		{
+			DrawVec3Control("Min", component.min, -100.f, 100.f);
+			DrawVec3Control("Max", component.max, -100.f, 100.f);
+		});
 
 	DrawComponent<RigidBody>("RigideBody", go, true, [](auto& component)
-	{
-		DrawVec3Control("Velocity", component.velocity, -100.f, 100.f);
-		DrawVec3Control("Acceleration", component.acceleration, -100.f, 100.f);
-		DrawVec3Control("Gravity Force", component.forceGravity, -100.f, 100.f);
-	});
+		{
+			DrawVec3Control("Velocity", component.velocity, -100.f, 100.f);
+			DrawVec3Control("Acceleration", component.acceleration, -100.f, 100.f);
+			DrawVec3Control("Gravity Force", component.forceGravity, -100.f, 100.f);
+		});
 
 	DrawComponent<Mesh>("Mesh", go, true, [](auto& component)
-	{
-		std::string old_path = component.path;
-		int old_lod = component.lod;
-		ImGui::Text(component.path.c_str());
-		ImGui::SliderInt("LOD : ", &component.lod, 0, 3);
-	});
+		{
+			std::string old_path = component.path;
+			int old_lod = component.lod;
+			ImGui::Text(component.path.c_str());
+			ImGui::SliderInt("LOD", &component.lod, 0, 3);
+		});
+
+	DrawComponent<Terrain>("Terrain", go, true, [](auto& component)
+		{
+			ImGui::DragFloat("Seed", &component.seed, 0.f, 10000000000000000000.f);
+			
+			ImGui::SliderInt("Xsize", &component.Xsize, 0, INT16_MAX);
+			ImGui::SliderInt("Ysize", &component.Ysize, 0, INT16_MAX);
+			ImGui::SliderInt("Zsize", &component.Zsize, 0, INT16_MAX);
+
+			ImGui::SliderInt("Octave", &component.octave, 0, 10);
+			ImGui::DragFloat("Persistance", &component.persistance, 0.f, 1.f);
+			ImGui::DragFloat("Lacunarity", &component.lacunarity, 0.f, 10.f);
+
+			ImGui::DragFloat("Seuil", &component.seuil, 0.f, 1.f);
+
+			ImGui::SliderInt("modificateur", &component.modificateur, 0, 32);
+
+		});
+	DrawComponent<Chunk>("Chunk", go, true, [](auto& component)
+		{
+
+			if (ImGui::Button("data", ImVec2{ 50, 20 }))
+				affichage.dataChunk = !affichage.dataChunk;
+
+			if (affichage.dataChunk)
+			{
+				ImGui::Begin("Data chunk");
+				if (ImGui::Button("Height", ImVec2{ 100, 20 }))
+				{
+					affichage.block = false;
+					affichage.height = true;
+				}
+				
+				ImGui::SameLine();
+				if (ImGui::Button("Block", ImVec2{ 100, 20 }))
+				{
+					affichage.block = true;
+					affichage.height = false;
+				}
+
+				ImGui::SameLine();
+				if (ImGui::SmallButton("x"))
+					affichage.dataChunk = false;
+
+				ImGui::Separator();
+				if (affichage.block)
+				{
+					ImGui::SliderInt("niveau", &component.niveau, 0, component.Zsize - 1);
+					ImGui::Separator();
+				}
+				ImGui::BeginTable("data", component.Ysize);
+
+				for (int x = 0; x < component.Xsize; x++)
+				{
+					for (int y = 0; y < component.Ysize; y++)
+					{
+						ImGui::TableNextColumn();
+						if (affichage.block)
+						{
+							if (component.data[x][y][component.niveau].sol)
+								ImGui::Text("t");
+							else
+								ImGui::Text("f");
+						}
+
+						if (affichage.height)
+						{
+							ImGui::Text(std::to_string(component.height[x][y]).c_str());
+						}
+					}
+					ImGui::TableNextRow();
+				}
+				ImGui::EndTable();
+				ImGui::End();
+			}
+		});
 }
 
 template<typename T, typename UIFunction>
