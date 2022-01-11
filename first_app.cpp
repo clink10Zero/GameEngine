@@ -16,6 +16,7 @@
 #include "components/mesh.hpp"
 #include "components/aabb.hpp"
 #include "components/terrain.hpp"
+
 #include "components/Camera.hpp"
 #include "components/MotionControl.hpp"
 
@@ -24,12 +25,12 @@
 #include "systems/gridSystem.hpp"
 #include "systems/collider_render_system.hpp"
 #include "systems/terrainSystem.hpp"
+
 #include "systems/viewSystem.hpp"
 
 #include "render_system/simple_render_system.hpp"
 #include "render_system/collider_render_system.hpp"
 #include "render_system/point_light_render_system.hpp"
-
 
 #include "ecs/coordinator.hpp"
 
@@ -50,6 +51,7 @@ using namespace setting;
 Coordinator gCoordinator;
 std::shared_ptr<PhysiqueSystem> physicsSystem;
 std::shared_ptr<TerrainSystem> terrainSystem;
+
 std::shared_ptr<GraphSystem> graphSystem;
 std::shared_ptr<ViewSystem> viewSystem;
 
@@ -139,6 +141,7 @@ namespace lve {
             viewSystem->Update(lveRenderer.getAspectRatio());
 
             terrainSystem->Update(frameTime, lveDevice);
+
 
             if (auto commandBuffer = lveRenderer.beginFrame()) {
                 int frameIndex = lveRenderer.getFrameIndex();
@@ -272,7 +275,7 @@ namespace lve {
             signature.set(gCoordinator.GetComponentType<Camera>());
             gCoordinator.SetSystemSignature<ViewSystem>(signature);
         }
-b
+
     }
 
     void FirstApp::loadGameObject() {
@@ -311,6 +314,15 @@ b
         gCoordinator.AddComponent<AABB>(wolf, AABB{});
 
         Graph g_wolf{};
+
+
+        //Floor
+        GameObject floor = gCoordinator.CreateGameObject();
+
+        Mesh m_floor{};
+        m_floor.path = "models/colored_cube.obj";
+        m_floor.lod = 0;
+        m_floor.data = LveModel::createModelFromFile(lveDevice, m_floor.path, m_floor.lod);
 
 
         //Floor
@@ -404,6 +416,9 @@ b
 
         g_racine.children.push_back(wolf);
         g_racine.children.push_back(floor);
+        g_racine.children.push_back(wall);
+        g_racine.children.push_back(player);
+        g_racine.children.push_back(camg);
 
         g_racine.children.push_back(wall);
         g_racine.children.push_back(player);

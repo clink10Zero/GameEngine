@@ -98,9 +98,8 @@ namespace lve {
             m.data->bind(frameInfo.commandBuffer);
             m.data->draw(frameInfo.commandBuffer);
         }
-        
-        Graph g = gCoordinator.GetCompenent<Graph>(go);
 
+        Graph g = gCoordinator.GetCompenent<Graph>(go);
         for (auto& obj : g.children) {
             renderObject(frameInfo, obj, worldTransform);
         }
