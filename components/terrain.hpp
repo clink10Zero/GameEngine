@@ -14,7 +14,8 @@ struct Chunk
 	std::pair<int, int> coordonner;
 
 	std::vector<std::vector<std::vector<Block>>> data{};
-	std::vector<std::vector<float>> height{};
+	std::vector<int> height{};
+
 
 	//for print data
 	int niveau = 0;
@@ -26,15 +27,14 @@ struct Chunk
 
 struct Terrain
 {
-	float seed;
+	int seed;
 
 	int Xsize = 16;
-	int Ysize = 16;
-	int Zsize = 64;
+	int Ysize = 64;
+	int Zsize = 16;
 
-	int octave = 8;
-	float persistance = 0.25f;
-	float lacunarity = 2.f;
+	int octave = 4;
+	float scalingBiais = 2.f;
 
 	float seuil = 0.7f;
 

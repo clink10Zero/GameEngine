@@ -3,6 +3,7 @@
 #include <limits>
 
 namespace lve {
+	/*
 	void KeyboardMovementController::moveInPlanXZ(GLFWwindow* window, float dt, LveGameObject& gameObject){
 
 		glm::vec3 rotate{ .0f };
@@ -35,4 +36,5 @@ namespace lve {
 			gameObject.transform.translation += moveSpeed * dt * glm::normalize(moveDir);
 		}
 	}
+	*/
 }

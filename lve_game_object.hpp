@@ -6,7 +6,7 @@
 #include <memory>
 
 namespace lve {
-
+	/*
 	struct TransformComponent{
 		glm::vec3 translation{ 0.f, 0.f, 0.f };
 		glm::vec3 scale{ 1.f, 1.f, 1.f };
@@ -51,4 +51,5 @@ namespace lve {
 			LveGameObject(id_t objId) : id{ objId } {}
 
 	};
+	*/
 }

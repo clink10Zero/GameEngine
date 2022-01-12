@@ -141,7 +141,6 @@ namespace lve {
 
             terrainSystem->Update(frameTime, lveDevice);
 
-
             if (auto commandBuffer = lveRenderer.beginFrame()) {
                 int frameIndex = lveRenderer.getFrameIndex();
                 FrameInfo frameInfo{ frameIndex, frameTime, commandBuffer, globalDescriptorSets[frameIndex] };

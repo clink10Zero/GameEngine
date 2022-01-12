@@ -10,7 +10,7 @@ void TerrainSystem::Init()
 	{
 		Terrain& terrain = gCoordinator.GetCompenent<Terrain>(go);
 		
-		Chunk c = CreateChunk(0, 0, terrain.Xsize, terrain.Ysize, terrain.Zsize, terrain.octave, terrain.persistance, terrain.lacunarity, terrain.modificateur, terrain.seed, terrain.seuil);
+		Chunk c = CreateChunk(0, 0, terrain.Xsize, terrain.Ysize, terrain.Zsize, terrain.octave, terrain.scalingBiais, terrain.modificateur, terrain.seed, terrain.seuil);
 
 		GameObject newChunk = gCoordinator.CreateGameObject();
 		Transform t{};
@@ -54,9 +54,9 @@ void TerrainSystem::Update(float dt, LveDevice& lveDevice)
 				
 				for (int x = 0; x < Xsize; x++)
 				{
-					for (int y = 0; y < Ysize; y++)
+					for (int z = 0; z < Zsize; z++)
 					{
-						for (int z = 0; z < Zsize; z++)
+						for (int y = 0; y < Ysize; y++)
 						{
 							if (c.data[x][y][z].sol)
 								triangulationCube(modelBuilder, c, x, y, z);
@@ -82,31 +82,15 @@ void TerrainSystem::Update(float dt, LveDevice& lveDevice)
 	}
 }
 
-Chunk TerrainSystem::CreateChunk(int x, int z, int Xsize, int Ysize, int Zsize, int octave, float persistance, float lacunarity, int modificateur, float seed, float seuil)
+Chunk TerrainSystem::CreateChunk(int _x, int _z, int Xsize, int Ysize, int Zsize, int octave, float bias, int modificateur, unsigned int seed, float seuil)
 {
 	Chunk c {};
-	c.coordonner = std::pair<int, int>{ x, z };
+	c.coordonner = std::pair<int, int>{ _x, _z };
 	c.Xsize = Xsize;
 	c.Ysize = Ysize;
 	c.Zsize = Zsize;
 
-	std::vector<std::vector<float>> heightMap{};
-
-	perlin::Perlin map(1532512342);
-
-	float frequency = 16;
-	float fx = Xsize / frequency;
-	float fy = Ysize / frequency;
-
-	for (int x = 0; x < Xsize; x++)
-	{
-		heightMap.push_back(std::vector<float>{});
-		for (int y = 0; y < Ysize; y++)
-		{
-			float p = map.accumulatedNoise2D(x / fx, y / fy, octave, lacunarity, persistance);
-			heightMap[x].push_back(p * modificateur);
-		}
-	}
+	std::vector<int> heightMap = PerlinNoise2D(c.Xsize, c.Zsize, makeSeedTab(seed, c.Xsize, c.Zsize), octave, bias, modificateur);
 
 	c.height = heightMap;
 
@@ -117,12 +101,13 @@ Chunk TerrainSystem::CreateChunk(int x, int z, int Xsize, int Ysize, int Zsize, 
 		{
 			c.data[x].push_back(std::vector<Block>{});
 
-			float level = heightMap[x][y];
-
 			for (int z = 0; z < Zsize; z++)
 			{
+
+				float level = heightMap[x * Xsize + z];
+
 				Block b{};
-				if (z < level)
+				if (y < level)
 				{
 					b.sol = true;
 				}
@@ -263,31 +248,10 @@ void TerrainSystem::AddFace(LveModel::Builder& builder, LveModel::Vertex v1, Lve
 	builder.vertices.push_back(v3);
 	builder.vertices.push_back(v4);
 
-	glm::uvec2 indexV1 = GetIndex(builder, index, v1);
-	glm::uvec2 indexV2 = GetIndex(builder, indexV1.x, v2);
-	glm::uvec2 indexV3 = GetIndex(builder, indexV2.x, v3);
-	glm::uvec2 indexV4 = GetIndex(builder, indexV3.x, v4);
-
-	builder.indices.push_back(indexV1.y);
-	builder.indices.push_back(indexV2.y);
-	builder.indices.push_back(indexV3.y);
-	builder.indices.push_back(indexV2.y);
-	builder.indices.push_back(indexV4.y);
-	builder.indices.push_back(indexV3.y);
-}
-
-glm::uvec2 TerrainSystem::GetIndex(LveModel::Builder builder, int index, LveModel::Vertex v1)
-{
-	int indexV1 = index;
-	int tmp = IndexOf(builder.vertices, v1);
-	if (tmp != -1)
-	{
-		indexV1 = tmp;
-	}
-	else
-	{
-		builder.vertices.push_back(v1);
-		index++;
-	}
-	return {index, indexV1};
+	builder.indices.push_back(index);
+	builder.indices.push_back(index + 1);
+	builder.indices.push_back(index + 2);
+	builder.indices.push_back(index + 1);
+	builder.indices.push_back(index + 3);
+	builder.indices.push_back(index + 2);
 }

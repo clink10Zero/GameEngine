@@ -131,17 +131,16 @@ void SceneHierarchyPanel::DrawComponents(GameObject go)
 
 	DrawComponent<Terrain>("Terrain", go, true, [](auto& component)
 		{
-			ImGui::DragFloat("Seed", &component.seed, 0.f, 10000000000000000000.f);
+			ImGui::DragInt("Seed", &component.seed, 1, 0, 10000000000000000000);
 			
 			ImGui::SliderInt("Xsize", &component.Xsize, 0, INT16_MAX);
 			ImGui::SliderInt("Ysize", &component.Ysize, 0, INT16_MAX);
 			ImGui::SliderInt("Zsize", &component.Zsize, 0, INT16_MAX);
 
-			ImGui::SliderInt("Octave", &component.octave, 0, 10);
-			ImGui::DragFloat("Persistance", &component.persistance, 0.f, 1.f);
-			ImGui::DragFloat("Lacunarity", &component.lacunarity, 0.f, 10.f);
+			ImGui::SliderInt("Octave", &component.octave, 0, 8);
+			ImGui::SliderFloat("Bias", &component.scalingBiais, 0.2f, 2.f);
 
-			ImGui::DragFloat("Seuil", &component.seuil, 0.f, 1.f);
+			ImGui::DragFloat("Seuil", &component.seuil, 0.2f, 0.f, 1.f);
 
 			ImGui::SliderInt("modificateur", &component.modificateur, 0, 32);
 
@@ -175,19 +174,19 @@ void SceneHierarchyPanel::DrawComponents(GameObject go)
 				ImGui::Separator();
 				if (affichage.block)
 				{
-					ImGui::SliderInt("niveau", &component.niveau, 0, component.Zsize - 1);
+					ImGui::SliderInt("niveau", &component.niveau, 0, component.Ysize - 1);
 					ImGui::Separator();
 				}
 				ImGui::BeginTable("data", component.Ysize);
 
 				for (int x = 0; x < component.Xsize; x++)
 				{
-					for (int y = 0; y < component.Ysize; y++)
+					for (int z = 0; z < component.Zsize; z++)
 					{
 						ImGui::TableNextColumn();
 						if (affichage.block)
 						{
-							if (component.data[x][y][component.niveau].sol)
+							if (component.data[x][component.niveau][z].sol)
 								ImGui::Text("t");
 							else
 								ImGui::Text("f");
@@ -195,7 +194,7 @@ void SceneHierarchyPanel::DrawComponents(GameObject go)
 
 						if (affichage.height)
 						{
-							ImGui::Text(std::to_string(component.height[x][y]).c_str());
+							ImGui::Text(std::to_string(component.height[x * component.Xsize + z]).c_str());
 						}
 					}
 					ImGui::TableNextRow();

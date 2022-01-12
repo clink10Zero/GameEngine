@@ -4,7 +4,8 @@
 #include "lve_window.hpp"
 
 namespace lve {
-	class KeyboardMovementController{
+	/*
+    class KeyboardMovementController{
 		public:
 			struct KeyMappings {
                 int moveLeft = GLFW_KEY_A;
@@ -28,4 +29,5 @@ namespace lve {
 		private:
 
 	};
+    */
 }
