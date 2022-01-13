@@ -57,6 +57,7 @@
     <ClInclude Include="components\Camera.hpp" />
     <ClInclude Include="components\graph.hpp" />
     <ClInclude Include="components\mesh.hpp" />
+    <ClInclude Include="components\MotionControl.hpp" />
     <ClInclude Include="components\RigidBody.hpp" />
     <ClInclude Include="components\terrain.hpp" />
     <ClInclude Include="components\Transform.hpp" />
@@ -104,6 +105,7 @@
     <ClInclude Include="systems\system.hpp" />
     <ClInclude Include="systems\terrainSystem.hpp" />
     <ClInclude Include="systems\viewSystem.hpp" />
+    <ClInclude Include="ViewControl.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\grid.frag" />
@@ -252,12 +254,12 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\cleme\OneDrive\Bureau\MASTER\S3\moteur\tinyloader;C:\Users\cleme\OneDrive\Bureau\MASTER\S3\moteur\glm;C:\Users\cleme\OneDrive\Bureau\MASTER\S3\moteur\glfw-3.3.5.bin.WIN64\include;C:\VulkanSDK\1.2.189.2\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Nouveau dossier\Visual Studio 2019\Libraries\tinyobjectloader;E:\Nouveau dossier\Visual Studio 2019\Libraries\glm;E:\Nouveau dossier\Visual Studio 2019\Libraries\glfw-3.3.5.bin.WIN64\include;C:\VulkanSDK\1.2.189.2\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\cleme\OneDrive\Bureau\MASTER\S3\moteur\glfw-3.3.5.bin.WIN64\lib-vc2015;C:\VulkanSDK\1.2.189.2\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\Nouveau dossier\Visual Studio 2019\Libraries\glfw-3.3.5.bin.WIN64\lib-vc2015;C:\VulkanSDK\1.2.189.2\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>

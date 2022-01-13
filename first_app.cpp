@@ -16,9 +16,9 @@
 #include "components/mesh.hpp"
 #include "components/aabb.hpp"
 #include "components/terrain.hpp"
-
 #include "components/Camera.hpp"
 #include "components/MotionControl.hpp"
+#include "components/ViewControl.hpp"
 
 #include "systems/graphSystem.hpp"
 #include "systems/physicsSystem.hpp"
@@ -66,8 +66,8 @@ namespace lve {
         glm::mat4 projection{ 1.f };
         glm::mat4 view{ 1.f };
         //glm::vec3 lightDirection = glm::normalize(glm::vec3{ 1.f, -3.f, -1.f });
-        glm::vec4 ambientLightColor = { 1.f, 1.f, 1.f, 0.02f };
-        glm::vec3 lightPosition{ -1.f };
+        glm::vec4 ambientLightColor = { 1.f, 1.f, 1.f, 20.f };
+        glm::vec3 lightPosition{ 11.f,-12.f,5.f };
         alignas(16) glm::vec4 lightColor{ 1.f };
     };
 
@@ -137,7 +137,7 @@ namespace lve {
             {
                 physicsSystem->Update(frameTime);
             }
-            viewSystem->Update(lveRenderer.getAspectRatio());
+            viewSystem->Update(lveRenderer.getAspectRatio(), frameTime);
 
             terrainSystem->Update(frameTime, lveDevice);
 
@@ -240,13 +240,13 @@ namespace lve {
         gCoordinator.RegisterComponent<Chunk>();
         gCoordinator.RegisterComponent<Camera>();
         gCoordinator.RegisterComponent<MotionControl>();
+        gCoordinator.RegisterComponent<ViewControl>();
 
         physicsSystem = gCoordinator.RegisterSystem<PhysiqueSystem>();
         {
             Signature signature;
             signature.set(gCoordinator.GetComponentType<Transform>());
             signature.set(gCoordinator.GetComponentType<Mesh>());
-            signature.set(gCoordinator.GetComponentType<AABB>());
 
             gCoordinator.SetSystemSignature<PhysiqueSystem>(signature);
         }
@@ -360,7 +360,7 @@ namespace lve {
         gCoordinator.AddComponent<Mesh>(player, m_player);
 
         Transform t_player{};
-        t_player.translation = glm::vec3(-1.f, 0.f, 0.f);
+        t_player.translation = glm::vec3(9.f, -6.f, 5.f);
         t_player.scale = glm::vec3(.4f, .9f, .2f);
 
         gCoordinator.AddComponent<Transform>(player, t_player);
@@ -387,13 +387,17 @@ namespace lve {
         Camera cam_cam{};
         gCoordinator.AddComponent<Camera>(cam, cam_cam);
 
+        ViewControl vc_cam{};
+        gCoordinator.AddComponent<ViewControl>(cam, vc_cam);
+
         Graph g_cam{};
 
         //CameraGlobale
         GameObject camg = gCoordinator.CreateGameObject();
 
         Transform t_camg{};
-        t_camg.translation = glm::vec3(0.f, -1.f, -7.f);
+        t_camg.translation = glm::vec3(11.f, -10.f, -7.f);
+        t_camg.rotation = glm::vec3(-glm::pi<float>()/6, 0.f, 0.f);
         gCoordinator.AddComponent<Transform>(camg, t_camg);
 
         Camera cam_camg{};

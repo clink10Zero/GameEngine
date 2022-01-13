@@ -296,6 +296,12 @@
     <ClInclude Include="components\Camera.hpp">
       <Filter>Fichiers d%27en-tête\component</Filter>
     </ClInclude>
+    <ClInclude Include="components\MotionControl.hpp">
+      <Filter>Fichiers d%27en-tête\component</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewControl.hpp">
+      <Filter>Fichiers d%27en-tête\component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\simple_shader.frag">
