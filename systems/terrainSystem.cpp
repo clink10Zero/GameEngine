@@ -78,7 +78,6 @@ void TerrainSystem::Update(float dt, LveDevice& lveDevice)
 				c.update = true;
 			}
 		}
-
 	}
 }
 
@@ -120,7 +119,7 @@ Chunk TerrainSystem::CreateChunk(int _x, int _z, int Xsize, int Ysize, int Zsize
 			for (int z = 0; z < Zsize; z++)
 			{
 
-				float level = heightMap[x * Xsize + z];
+				int level = heightMap[x * Xsize + z] + 1;
 
 				Block b{};
 				if (y < level)
@@ -259,6 +258,11 @@ void TerrainSystem::AddFace(LveModel::Builder& builder, LveModel::Vertex v1, Lve
 {
 	int index = builder.vertices.size();
 
+	v1.color = glm::vec3{ 0.f, 0.f, 0.f };
+	v2.color = glm::vec3{ 0.f, 0.f, 0.f };
+	v3.color = glm::vec3{ 0.f, 0.f, 0.f };
+	v4.color = glm::vec3{ 0.f, 0.f, 0.f };
+
 	builder.vertices.push_back(v1);
 	builder.vertices.push_back(v2);
 	builder.vertices.push_back(v3);
@@ -270,4 +274,5 @@ void TerrainSystem::AddFace(LveModel::Builder& builder, LveModel::Vertex v1, Lve
 	builder.indices.push_back(index + 1);
 	builder.indices.push_back(index + 3);
 	builder.indices.push_back(index + 2);
+
 }

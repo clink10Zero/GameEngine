@@ -7,6 +7,7 @@ struct MotionControl {
 		int moveForward = GLFW_KEY_W;
 		int moveBackward = GLFW_KEY_S;
 		int moveUp = GLFW_KEY_SPACE;
+		int moveDown = -1;
 		int turnLeft = GLFW_KEY_Q;
 		int turnRight = GLFW_KEY_E;
 	};

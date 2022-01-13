@@ -21,13 +21,14 @@ void InterractionTerrain::update(float dt)
 		if (it.tileFound && glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 		{
 			glm::vec3 destroyed = it.destroyed;
-			
 			it.terrain.data[it.indice].data[destroyed.x][destroyed.y][destroyed.z];
+			it.terrain.data[it.indice].update = false;
 		}
 		if (it.tileFound && glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
 		{
 			glm::vec3 placeBloc = it.placeBloc;
 			it.terrain.data[it.indice].data[placeBloc.x][placeBloc.y][placeBloc.z];
+			it.terrain.data[it.indice].update = false;
 		}
 	}
 }

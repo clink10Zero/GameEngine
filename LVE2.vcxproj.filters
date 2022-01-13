@@ -308,6 +308,12 @@
     <ClInclude Include="components\interTerrain.h">
       <Filter>Fichiers d%27en-tête\component</Filter>
     </ClInclude>
+    <ClInclude Include="ViewControl.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="components\ViewControl.hpp">
+      <Filter>Fichiers d%27en-tête\component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\simple_shader.frag">

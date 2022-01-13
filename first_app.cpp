@@ -68,7 +68,7 @@ namespace lve {
         glm::mat4 projection{ 1.f };
         glm::mat4 view{ 1.f };
         //glm::vec3 lightDirection = glm::normalize(glm::vec3{ 1.f, -3.f, -1.f });
-        glm::vec4 ambientLightColor = { 1.f, 1.f, 1.f, 20.f };
+        glm::vec4 ambientLightColor = { 1.f, 1.f, 1.f, 10.f };
         glm::vec3 lightPosition{ 11.f,-12.f,5.f };
         alignas(16) glm::vec4 lightColor{ 1.f };
     };
@@ -288,7 +288,6 @@ namespace lve {
             signature.set(gCoordinator.GetComponentType<Camera>());
             gCoordinator.SetSystemSignature<ViewSystem>(signature);
         }
-
     }
 
     void FirstApp::loadGameObject() {
@@ -304,31 +303,7 @@ namespace lve {
 
         gCoordinator.AddComponent<Transform>(racine, t_racine);
 
-        //Wolf
-        /*
-        GameObject wolf = gCoordinator.CreateGameObject();
-        Mesh m_wolf;
-        m_wolf.path = "models/Wolf_obj.obj";
-        m_wolf.lod = 0;
-        m_wolf.data = LveModel::createModelFromFile(lveDevice, m_wolf.path, m_wolf.lod);
-        gCoordinator.AddComponent<Mesh>(wolf, m_wolf);
 
-        Transform t_wolf{};
-        t_wolf.translation = glm::vec3(0.f, 0.f, 0.f);
-        t_wolf.rotation = glm::vec3(glm::pi<float>(), 0.f, 0.f);
-        t_wolf.scale = glm::vec3(1.f, 1.f, 1.f);
-
-        gCoordinator.AddComponent<Transform>(wolf, t_wolf);
-
-        RigidBody rb_wolf{};
-        rb_wolf.forceGravity = glm::vec3{ 0.f, 9.f, 0.f };
-        //rb_wolf.velocity = rb_wolf.forceGravity;
-        gCoordinator.AddComponent<RigidBody>(wolf, rb_wolf);
-
-        gCoordinator.AddComponent<AABB>(wolf, AABB{});
-
-        Graph g_wolf{};
-        */
         //Floor
         GameObject floor = gCoordinator.CreateGameObject();
 
@@ -341,29 +316,6 @@ namespace lve {
         gCoordinator.AddComponent<Terrain>(floor, Terrain{});
 
         Graph g_floor{};
-        
-        //Big wall
-        /*
-        GameObject wall = gCoordinator.CreateGameObject();
-
-        Mesh m_wall{};
-        m_wall.path = "models/colored_cube.obj";
-        m_wall.lod = 0;
-        m_wall.data = LveModel::createModelFromFile(lveDevice, m_wall.path, m_wall.lod);
-
-        gCoordinator.AddComponent<Mesh>(wall, m_wall);
-
-        Transform t_wall{};
-        t_wall.translation = glm::vec3(-2.f, 0.f, 0.f);
-        t_wall.rotation = glm::vec3(0.f, 0.f, 0.f);
-        t_wall.scale = glm::vec3(0.5f, 4.f, 4.f);
-
-        gCoordinator.AddComponent<Transform>(wall, t_wall);
-
-        gCoordinator.AddComponent<AABB>(wall, AABB{});
-
-        Graph g_wall{};
-        */
 
         //Player
         GameObject player = gCoordinator.CreateGameObject();
@@ -401,9 +353,6 @@ namespace lve {
         Camera cam_cam{};
         gCoordinator.AddComponent<Camera>(cam, cam_cam);
 
-        InterTerrain it{};
-        it.terrain = gCoordinator.GetCompenent<Terrain>(floor);
-        gCoordinator.AddComponent<InterTerrain>(cam, it);
         ViewControl vc_cam{};
         gCoordinator.AddComponent<ViewControl>(cam, vc_cam);
 
@@ -421,6 +370,22 @@ namespace lve {
         Camera cam_camg{};
         gCoordinator.AddComponent<Camera>(camg, cam_camg);
 
+        MotionControl mc_camg{};
+        mc_camg.keys.moveForward = GLFW_KEY_I;
+        mc_camg.keys.moveBackward = GLFW_KEY_K;
+        mc_camg.keys.moveLeft = GLFW_KEY_J;
+        mc_camg.keys.moveRight = GLFW_KEY_L;
+        mc_camg.keys.moveUp = GLFW_KEY_Y;
+        mc_camg.keys.moveDown = GLFW_KEY_H;
+        gCoordinator.AddComponent<MotionControl>(camg, mc_camg);
+
+        gCoordinator.AddComponent<ViewControl>(camg, ViewControl{});
+
+        InterTerrain it{};
+        it.terrain = gCoordinator.GetCompenent<Terrain>(floor);
+        it.distance = 8.f;
+        gCoordinator.AddComponent<InterTerrain>(camg, it);
+
         Graph g_camg{};
 
 
@@ -435,14 +400,8 @@ namespace lve {
 
         gCoordinator.AddComponent<Graph>(racine, g_racine);
 
-        //g_wolf.parent = racine;
-        //gCoordinator.AddComponent<Graph>(wolf, g_wolf);
-
         g_floor.parent = racine;
         gCoordinator.AddComponent<Graph>(floor, g_floor);
-        
-        //g_wall.parent = racine;
-        //gCoordinator.AddComponent<Graph>(wall, g_wall);
 
         g_player.parent = racine;
         gCoordinator.AddComponent<Graph>(player, g_player);
