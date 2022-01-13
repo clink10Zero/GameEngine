@@ -93,7 +93,7 @@ void ViewSystem::moveInPlanXZ(float dt, GameObject go) {
 		if (glfwGetKey(window, mc.keys.moveRight) == GLFW_PRESS) moveDir += rightDir;
 		if (glfwGetKey(window, mc.keys.moveLeft) == GLFW_PRESS) moveDir -= rightDir;
 		if (glfwGetKey(window, mc.keys.moveUp) == GLFW_PRESS) moveDir += upDir;
-		if (mc.keys.moveDown != -1 && glfwGetKey(window, mc.keys.moveUp) == GLFW_PRESS) moveDir -= upDir;
+		if (glfwGetKey(window, mc.keys.moveDown) == GLFW_PRESS) moveDir -= upDir;
 
 		if (glm::dot(moveDir, moveDir) > std::numeric_limits<float>::epsilon()) {
 			mc.movement = mc.moveSpeed * dt * glm::normalize(moveDir);

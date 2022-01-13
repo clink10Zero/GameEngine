@@ -258,12 +258,12 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\cleme\OneDrive\Bureau\MASTER\S3\moteur\tinyloader;C:\Users\cleme\OneDrive\Bureau\MASTER\S3\moteur\glm;C:\Users\cleme\OneDrive\Bureau\MASTER\S3\moteur\glfw-3.3.5.bin.WIN64\include;C:\VulkanSDK\1.2.189.2\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\Libraries\tinyobjectloader;.\Libraries\glm;.\Libraries\glfw-3.3.5.bin.WIN64\include;C:\VulkanSDK\1.2.189.2\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\cleme\OneDrive\Bureau\MASTER\S3\moteur\glfw-3.3.5.bin.WIN64\lib-vc2015;C:\VulkanSDK\1.2.189.2\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>.\Libraries\glfw-3.3.5.bin.WIN64\lib-vc2015;C:\VulkanSDK\1.2.189.2\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>

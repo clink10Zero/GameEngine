@@ -34,7 +34,7 @@ namespace lve {
 		void loadCoordinateur(GLFWwindow* window);
 		GameObject racine;
 
-		LveWindow lveWindow{WIDTH, HEIGHT, "PouleEngine 0.2v (Toujours pas Minecraft! XOXO)"};
+		LveWindow lveWindow{WIDTH, HEIGHT, "PouleEngine 0.2v"};
 		LveDevice lveDevice{lveWindow};
 		LveRenderer lveRenderer{ lveWindow, lveDevice };
 		std::unique_ptr<LveDescriptorPool> globalPool{};

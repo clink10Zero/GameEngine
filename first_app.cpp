@@ -68,8 +68,8 @@ namespace lve {
         glm::mat4 projection{ 1.f };
         glm::mat4 view{ 1.f };
         //glm::vec3 lightDirection = glm::normalize(glm::vec3{ 1.f, -3.f, -1.f });
-        glm::vec4 ambientLightColor = { 1.f, 1.f, 1.f, 10.f };
-        glm::vec3 lightPosition{ 11.f,-12.f,5.f };
+        glm::vec4 ambientLightColor = { 1.f, 1.f, 1.f, 0.02f };
+        glm::vec3 lightPosition{ -1.f };
         alignas(16) glm::vec4 lightColor{ 1.f };
     };
 
@@ -305,15 +305,35 @@ namespace lve {
 
 
         //Floor
+        GameObject terrain = gCoordinator.CreateGameObject();
+
+        Transform t_terrain{};
+        t_terrain.translation = glm::vec3(0.f, 4.f, 0.f);
+        t_terrain.rotation = glm::vec3(0.f, 0.f, 0.f);
+        t_terrain.scale = glm::vec3(1.f, 1.f, 1.f);
+
+        gCoordinator.AddComponent<Transform>(terrain, t_terrain);
+        gCoordinator.AddComponent<Terrain>(terrain, Terrain{});
+
+        Graph g_terrain{};
+        
+        //Floor
         GameObject floor = gCoordinator.CreateGameObject();
 
+        Mesh m_floor{};
+        m_floor.path = "models/colored_cube.obj";
+        m_floor.lod = 0;
+        m_floor.data = LveModel::createModelFromFile(lveDevice, m_floor.path, m_floor.lod);
+
+        gCoordinator.AddComponent<Mesh>(floor, m_floor);
+
         Transform t_floor{};
-        t_floor.translation = glm::vec3(0.f, 2.f, 0.f);
+        t_floor.translation = glm::vec3(-1.f, 2.f, 0.f);
         t_floor.rotation = glm::vec3(0.f, 0.f, 0.f);
-        t_floor.scale = glm::vec3(1.f, 1.f, 1.f);
+        t_floor.scale = glm::vec3(4.f, 0.5f, 4.f);
 
         gCoordinator.AddComponent<Transform>(floor, t_floor);
-        gCoordinator.AddComponent<Terrain>(floor, Terrain{});
+        gCoordinator.AddComponent<AABB>(floor, AABB{});
 
         Graph g_floor{};
 
@@ -326,7 +346,7 @@ namespace lve {
         gCoordinator.AddComponent<Mesh>(player, m_player);
 
         Transform t_player{};
-        t_player.translation = glm::vec3(9.f, -6.f, 5.f);
+        t_player.translation = glm::vec3(-1.f, -1.f, 0.f);
         t_player.scale = glm::vec3(.4f, .9f, .2f);
 
         gCoordinator.AddComponent<Transform>(player, t_player);
@@ -363,7 +383,7 @@ namespace lve {
         GameObject camg = gCoordinator.CreateGameObject();
 
         Transform t_camg{};
-        t_camg.translation = glm::vec3(11.f, -10.f, -7.f);
+        t_camg.translation = glm::vec3(0, -4, -7.f);
         t_camg.rotation = glm::vec3(-glm::pi<float>()/6, 0.f, 0.f);
         gCoordinator.AddComponent<Transform>(camg, t_camg);
 
@@ -382,18 +402,19 @@ namespace lve {
         gCoordinator.AddComponent<ViewControl>(camg, ViewControl{});
 
         InterTerrain it{};
-        it.terrain = gCoordinator.GetCompenent<Terrain>(floor);
+        it.terrain = gCoordinator.GetCompenent<Terrain>(terrain);
         it.distance = 8.f;
         gCoordinator.AddComponent<InterTerrain>(camg, it);
 
         Graph g_camg{};
 
-
+        
         //Graph
         g_player.children.push_back(cam);
 
         //g_racine.children.push_back(wolf);
         g_racine.children.push_back(floor);
+        g_racine.children.push_back(terrain);
         //g_racine.children.push_back(wall);
         g_racine.children.push_back(player);
         g_racine.children.push_back(camg);
@@ -402,6 +423,9 @@ namespace lve {
 
         g_floor.parent = racine;
         gCoordinator.AddComponent<Graph>(floor, g_floor);
+        
+        g_terrain.parent = racine;
+        gCoordinator.AddComponent<Graph>(terrain, g_terrain);
 
         g_player.parent = racine;
         gCoordinator.AddComponent<Graph>(player, g_player);
