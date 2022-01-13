@@ -203,6 +203,20 @@ void SceneHierarchyPanel::DrawComponents(GameObject go)
 				ImGui::End();
 			}
 		});
+
+	DrawComponent<Camera>("Camera", go, true, [](auto& component)
+		{
+			
+		});
+	DrawComponent<MotionControl>("MotionControl", go, true, [](auto& component)
+		{
+
+		});
+	DrawComponent<InterTerrain>("Interraction Terrain", go, true, [](auto& component)
+		{
+			DrawVec3Control("drestroyed", component.destroyed);
+			DrawVec3Control("placeBloc", component.placeBloc);
+		});
 }
 
 template<typename T, typename UIFunction>

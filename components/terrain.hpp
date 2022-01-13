@@ -16,7 +16,6 @@ struct Chunk
 	std::vector<std::vector<std::vector<Block>>> data{};
 	std::vector<int> height{};
 
-
 	//for print data
 	int niveau = 0;
 
