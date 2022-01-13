@@ -19,8 +19,11 @@ class TerrainSystem : public System
 {
 	public:
 		void Init();
-
 		void Update(float dt, LveDevice& lveDevice);
+
+		int getChunkAt(Terrain& terrain, int x, int z);
+		bool getSolInChunkAt(Chunk& c, int x, int y, int z);
+		int getBlocAt(Terrain& terrain, int min, glm::uvec3 coEntiere);
 
 	private:
 
