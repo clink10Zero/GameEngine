@@ -9,6 +9,9 @@
 #include "components/mesh.hpp"
 #include "components/aabb.hpp"
 #include "components/terrain.hpp"
+#include "components/Camera.hpp"
+#include "components/MotionControl.hpp"
+#include "components/interTerrain.h"
 
 namespace lve {
     class SceneHierarchyPanel {

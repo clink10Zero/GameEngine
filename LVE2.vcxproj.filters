@@ -141,6 +141,9 @@
     <ClCompile Include="systems\viewSystem.cpp">
       <Filter>Fichiers sources\systems</Filter>
     </ClCompile>
+    <ClCompile Include="systems\interractionTerrain.cpp">
+      <Filter>Fichiers sources\systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="first_app.hpp">
@@ -296,10 +299,13 @@
     <ClInclude Include="components\Camera.hpp">
       <Filter>Fichiers d%27en-tête\component</Filter>
     </ClInclude>
+    <ClInclude Include="systems\interractionTerrain.hpp">
+      <Filter>Fichiers d%27en-tête\systems</Filter>
+    </ClInclude>
     <ClInclude Include="components\MotionControl.hpp">
       <Filter>Fichiers d%27en-tête\component</Filter>
     </ClInclude>
-    <ClInclude Include="ViewControl.hpp">
+    <ClInclude Include="components\interTerrain.h">
       <Filter>Fichiers d%27en-tête\component</Filter>
     </ClInclude>
   </ItemGroup>

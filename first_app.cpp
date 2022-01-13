@@ -16,6 +16,7 @@
 #include "components/mesh.hpp"
 #include "components/aabb.hpp"
 #include "components/terrain.hpp"
+#include "components/interTerrain.h"
 #include "components/Camera.hpp"
 #include "components/MotionControl.hpp"
 #include "components/ViewControl.hpp"
@@ -24,7 +25,7 @@
 #include "systems/physicsSystem.hpp"
 #include "systems/gridSystem.hpp"
 #include "systems/terrainSystem.hpp"
-
+#include "systems/interractionTerrain.hpp"
 #include "systems/viewSystem.hpp"
 
 #include "render_system/simple_render_system.hpp"
@@ -48,11 +49,12 @@ using namespace printGUI;
 using namespace setting;
 
 Coordinator gCoordinator;
+
 std::shared_ptr<PhysiqueSystem> physicsSystem;
 std::shared_ptr<TerrainSystem> terrainSystem;
-
 std::shared_ptr<GraphSystem> graphSystem;
 std::shared_ptr<ViewSystem> viewSystem;
+std::shared_ptr<InterractionTerrain> interractionTerrainSystem;
 
 //permet de savoir si on doit afficher ou non une window
 Print affichage{};
@@ -133,12 +135,13 @@ namespace lve {
             auto frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
             currentTime = newTime;
 
+
             if (!editor)
             {
+                interractionTerrainSystem->update(frameTime);
                 physicsSystem->Update(frameTime);
             }
             viewSystem->Update(lveRenderer.getAspectRatio(), frameTime);
-
             terrainSystem->Update(frameTime, lveDevice);
 
             if (auto commandBuffer = lveRenderer.beginFrame()) {
@@ -240,7 +243,9 @@ namespace lve {
         gCoordinator.RegisterComponent<Chunk>();
         gCoordinator.RegisterComponent<Camera>();
         gCoordinator.RegisterComponent<MotionControl>();
+        gCoordinator.RegisterComponent<InterTerrain>();
         gCoordinator.RegisterComponent<ViewControl>();
+
 
         physicsSystem = gCoordinator.RegisterSystem<PhysiqueSystem>();
         {
@@ -267,6 +272,15 @@ namespace lve {
             signature.set(gCoordinator.GetComponentType<Terrain>());
             gCoordinator.SetSystemSignature<TerrainSystem>(signature);
         }
+
+        interractionTerrainSystem = gCoordinator.RegisterSystem<InterractionTerrain>();
+        {
+            Signature signature;
+            signature.set(gCoordinator.GetComponentType<InterTerrain>());
+            gCoordinator.SetSystemSignature<InterractionTerrain>(signature);
+        }
+
+        interractionTerrainSystem->init(window);
 
         viewSystem = gCoordinator.RegisterSystem<ViewSystem>();
         {
@@ -387,8 +401,12 @@ namespace lve {
         Camera cam_cam{};
         gCoordinator.AddComponent<Camera>(cam, cam_cam);
 
+        InterTerrain it{};
+        it.terrain = gCoordinator.GetCompenent<Terrain>(floor);
+        gCoordinator.AddComponent<InterTerrain>(cam, it);
         ViewControl vc_cam{};
         gCoordinator.AddComponent<ViewControl>(cam, vc_cam);
+
 
         Graph g_cam{};
 

@@ -48,6 +48,7 @@
     <ClCompile Include="sceneHierarchy.cpp" />
     <ClCompile Include="systems\graphSystem.cpp" />
     <ClCompile Include="systems\gridSystem.cpp" />
+    <ClCompile Include="systems\interractionTerrain.cpp" />
     <ClCompile Include="systems\physicsSystem.cpp" />
     <ClCompile Include="systems\terrainSystem.cpp" />
     <ClCompile Include="systems\viewSystem.cpp" />
@@ -56,6 +57,7 @@
     <ClInclude Include="components\aabb.hpp" />
     <ClInclude Include="components\Camera.hpp" />
     <ClInclude Include="components\graph.hpp" />
+    <ClInclude Include="components\interTerrain.h" />
     <ClInclude Include="components\mesh.hpp" />
     <ClInclude Include="components\MotionControl.hpp" />
     <ClInclude Include="components\RigidBody.hpp" />
@@ -101,6 +103,7 @@
     <ClInclude Include="sceneHierarchy.hpp" />
     <ClInclude Include="systems\graphSystem.hpp" />
     <ClInclude Include="systems\gridSystem.hpp" />
+    <ClInclude Include="systems\interractionTerrain.hpp" />
     <ClInclude Include="systems\physicsSystem.hpp" />
     <ClInclude Include="systems\system.hpp" />
     <ClInclude Include="systems\terrainSystem.hpp" />
