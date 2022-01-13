@@ -65,8 +65,12 @@ void PhysiqueSystem::moveInPlanXZ(float dt, GameObject go) {
 		if (glfwGetKey(window, mc.keys.moveBackward) == GLFW_PRESS) moveDir -= forwardDir;
 		if (glfwGetKey(window, mc.keys.moveRight) == GLFW_PRESS) moveDir += rightDir;
 		if (glfwGetKey(window, mc.keys.moveLeft) == GLFW_PRESS) moveDir -= rightDir;
-		if (glfwGetKey(window, mc.keys.moveUp) == GLFW_PRESS) moveDir += upDir;
-		if (mc.keys.moveDown != -1 && glfwGetKey(window, mc.keys.moveUp) == GLFW_PRESS) moveDir -= upDir;
+		if (glfwGetKey(window, mc.keys.moveUp) == GLFW_PRESS)
+		{
+			
+			moveDir += upDir;
+		}
+
 
 		if (glm::dot(moveDir, moveDir) > std::numeric_limits<float>::epsilon()) {
 			mc.movement = mc.moveSpeed * dt * glm::normalize(moveDir);
@@ -124,22 +128,31 @@ void PhysiqueSystem::testCollision(float dt, GameObject go){
 						glm::vec3 dEntry;//distance pour entrée
 						glm::vec3 dExit;//distance pour sortir
 
-						dEntry.x = aabb2.min.x - aabb.max.x;
+						/*dEntry.x = aabb2.min.x - aabb.max.x;
 						dExit.x = aabb2.max.x - aabb.min.x;
 						if (std::abs(aabb.max.x - aabb2.min.x) < std::abs(dEntry.x)) {
 							dEntry.x = aabb.max.x - aabb2.min.x;
 							dExit.x = aabb.min.x - aabb2.max.x;
-						}
+						}*/
 
 						dEntry.y = aabb2.min.y - aabb.max.y;
-						dExit.y = aabb2.max.y - aabb.min.y;
+						//dExit.y = aabb2.max.y - aabb.min.y;
 						if (std::abs(aabb.max.y - aabb2.min.y) < std::abs(dEntry.y)) {
 							dEntry.y = aabb.max.y - aabb2.min.y;
-							dExit.y = aabb.min.y - aabb2.max.y;
+							//dExit.y = aabb.min.y - aabb2.max.y;
+						}
+						move.y = dEntry.y;
+						if (move.y==0 && gCoordinator.HaveComponent<MotionControl>(go)) {
+							if (gCoordinator.HaveComponent<RigidBody>(go)) {
+								RigidBody& rb = gCoordinator.GetCompenent<RigidBody>(go);
+								rb.velocity *= 0.f;
+							}
+							MotionControl& mc = gCoordinator.GetCompenent<MotionControl>(go);
+							move += mc.movement;
 						}
 
 
-						dEntry.z = aabb2.min.z - aabb.max.z;
+						/*dEntry.z = aabb2.min.z - aabb.max.z;
 						dExit.z = aabb2.max.z - aabb.min.z;
 						if (std::abs(aabb.max.z - aabb2.min.z) < std::abs(dEntry.z)) {
 							dEntry.z = std::abs(aabb.max.z - aabb2.min.z);
@@ -173,8 +186,8 @@ void PhysiqueSystem::testCollision(float dt, GameObject go){
 							tExit.z = dExit.z / move.z;
 						}
 
-						/*In order to collide, both axes need to get collided .So, we will take the longest time to begin collision.
-						And when end collision, we only need one of the axes exit collision, so we will take the quickest time to exit collision.*/
+						//In order to collide, both axes need to get collided .So, we will take the longest time to begin collision.
+						//And when end collision, we only need one of the axes exit collision, so we will take the quickest time to exit collision.
 						float entryTime = max(max(tEntry.x, tEntry.y), tEntry.z);
 						float exitTime = min(min(tExit.x, tExit.y), tExit.z);
 
@@ -271,11 +284,11 @@ void PhysiqueSystem::testCollision(float dt, GameObject go){
 									}
 								}
 							}
-						}
+						}*/
 					}
 				}
 				else {
-					if (gCoordinator.HaveComponent<Chunk>(go2)) {
+					/*if (gCoordinator.HaveComponent<Chunk>(go2)) {
 						GameObject& parent = gCoordinator.GetCompenent<Graph>(go2).parent;
 						Terrain& terrain = gCoordinator.GetCompenent<Terrain>(parent);
 						Transform& transform = gCoordinator.GetCompenent<Transform>(go);
@@ -302,12 +315,12 @@ void PhysiqueSystem::testCollision(float dt, GameObject go){
 								//TODO on verra un autre jour
 							}
 						}
-					}
+					}*/
 				}
 			}
 		}
 	
-		for (auto& col : collisions) {
+		/*for (auto& col : collisions) {
 			eDirection c = col.first;
 			glm::vec2 whenWhere = col.second;
 			if (whenWhere[1] != INFINY) {
@@ -328,7 +341,7 @@ void PhysiqueSystem::testCollision(float dt, GameObject go){
 					move.z = whenWhere[1];
 				}
 			}
-		}
+		}*/
 		Transform& transform = gCoordinator.GetCompenent<Transform>(go);
 		transform.translation += move;
 	}

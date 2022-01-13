@@ -308,7 +308,7 @@ namespace lve {
         GameObject terrain = gCoordinator.CreateGameObject();
 
         Transform t_terrain{};
-        t_terrain.translation = glm::vec3(0.f, 4.f, 0.f);
+        t_terrain.translation = glm::vec3(30.f, 0.f, 0.f);
         t_terrain.rotation = glm::vec3(0.f, 0.f, 0.f);
         t_terrain.scale = glm::vec3(1.f, 1.f, 1.f);
 
@@ -368,6 +368,7 @@ namespace lve {
 
         Transform t_cam{};
         t_cam.translation = glm::vec3(0.f, -1.f, -1.f);
+        t_cam.rotation = glm::vec3(-glm::pi<float>() / 12, 0.f, 0.f);
         gCoordinator.AddComponent<Transform>(cam, t_cam);
 
         Camera cam_cam{};
@@ -413,8 +414,8 @@ namespace lve {
         g_player.children.push_back(cam);
 
         //g_racine.children.push_back(wolf);
-        g_racine.children.push_back(floor);
         g_racine.children.push_back(terrain);
+        g_racine.children.push_back(floor);
         //g_racine.children.push_back(wall);
         g_racine.children.push_back(player);
         g_racine.children.push_back(camg);

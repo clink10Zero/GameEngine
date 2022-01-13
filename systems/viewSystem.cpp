@@ -71,16 +71,6 @@ void ViewSystem::moveInPlanXZ(float dt, GameObject go) {
 		MotionControl& mc = gCoordinator.GetCompenent<MotionControl>(go);
 
 		mc.movement = { 0.f, 0.f, 0.f };
-		glm::vec3 rotate{ .0f };
-		if (glfwGetKey(window, mc.keys.turnRight) == GLFW_PRESS) rotate.y += 1.f;
-		if (glfwGetKey(window, mc.keys.turnLeft) == GLFW_PRESS) rotate.y -= 1.f;
-
-		if (glm::dot(rotate, rotate) > std::numeric_limits<float>::epsilon()) {
-			transform.rotation += mc.lookSpeed * dt * glm::normalize(rotate);
-		}
-
-		transform.rotation.x = glm::clamp(transform.rotation.x, -1.5f, 1.5f);
-		transform.rotation.y = glm::mod(transform.rotation.y, glm::two_pi<float>());
 
 		float yaw = transform.rotation.y;
 		const glm::vec3 forwardDir{ sin(yaw), .0f, cos(yaw) };
